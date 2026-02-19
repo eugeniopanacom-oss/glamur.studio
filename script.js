@@ -554,7 +554,7 @@ if (testimonialItems.length > 0 && testimonialDots.length > 0) {
     console.log('❌ ERROR: No se encontraron los elementos de testimonios');
 }
 
-    // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
+// ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
 console.log('🖱️ Iniciando toggle para tarjetas de trabajos en móvil');
 
 const workCards2 = document.querySelectorAll('.work-card');
@@ -562,31 +562,37 @@ const workCards2 = document.querySelectorAll('.work-card');
 if (workCards2.length > 0) {
     console.log(`✅ ${workCards2.length} tarjetas de trabajo encontradas`);
     
-    // Función para detectar si es móvil (opcional, puedes aplicar siempre el comportamiento)
+    // Función para detectar si es móvil
     function isMobile() {
-        return window.innerWidth <= 768; // Mismo breakpoint que tus media queries
+        return window.innerWidth <= 768;
     }
+    
+    // Primero, asegurarnos de que todas las tarjetas comiencen con overlay oculto
+    workCards2.forEach(card => {
+        const overlay = card.querySelector('.pink-hover-overlay');
+        if (overlay) {
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+        }
+    });
     
     workCards2.forEach(card => {
         card.addEventListener('click', function(e) {
-            // Prevenir que el click se propague si hay otros elementos clickeables dentro
             e.stopPropagation();
             
-            // Buscar el overlay dentro de esta tarjeta
-            const overlay = this.querySelector('.pink-hover-overlay');
-            
-            if (overlay) {
-                // Si estamos en móvil O queremos el comportamiento toggle en todos los dispositivos
-                if (isMobile()) {
+            // Solo aplicar toggle en móvil
+            if (isMobile()) {
+                const overlay = this.querySelector('.pink-hover-overlay');
+                
+                if (overlay) {
                     // Verificar si esta tarjeta ya está activa
-                    const isActive = this.classList.contains('work-card-active');
+                    const isActive = overlay.classList.contains('opacity-100');
                     
                     if (isActive) {
                         // Si está activa, desactivarla
                         console.log('🔴 Desactivando tarjeta');
                         overlay.classList.remove('opacity-100');
                         overlay.classList.add('opacity-0');
-                        this.classList.remove('work-card-active');
                     } else {
                         // Si no está activa, desactivar todas las demás primero
                         workCards2.forEach(otherCard => {
@@ -595,31 +601,27 @@ if (workCards2.length > 0) {
                                 otherOverlay.classList.remove('opacity-100');
                                 otherOverlay.classList.add('opacity-0');
                             }
-                            otherCard.classList.remove('work-card-active');
                         });
                         
                         // Activar esta tarjeta
                         console.log('🟢 Activando tarjeta');
                         overlay.classList.remove('opacity-0');
                         overlay.classList.add('opacity-100');
-                        this.classList.add('work-card-active');
                     }
                 }
             }
         });
     });
     
-    // También manejar el cambio de tamaño de ventana para resetear en desktop
+    // Manejar el cambio de tamaño de ventana
     window.addEventListener('resize', function() {
         if (!isMobile()) {
-            // En desktop, asegurar que todas las tarjetas tengan el comportamiento hover normal
+            // En desktop, resetear todas las tarjetas
             workCards2.forEach(card => {
                 const overlay = card.querySelector('.pink-hover-overlay');
                 if (overlay) {
-                    // Remover clases de toggle
                     overlay.classList.remove('opacity-100');
                     overlay.classList.add('opacity-0');
-                    card.classList.remove('work-card-active');
                 }
             });
         }
@@ -629,5 +631,5 @@ if (workCards2.length > 0) {
     
 } else {
     console.log('❌ No se encontraron tarjetas de trabajo');
-}
+}    
 });
