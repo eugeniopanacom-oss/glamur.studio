@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Glamour Studio | Reserva de Lujo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#f4c025",
+                "background-light": "#f8f8f5",
+                "background-dark": "#221e10",
+                "accent-pink": "#fdf2f2",
+                "gold-muted": "#d4af37",
+              },
+              fontFamily: {
+                "display": ["Manrope", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .gold-gradient {
+            background: linear-gradient(135deg, #f4c025 0%, #d4af37 100%);
+        }
+        .progress-line {
+            height: 2px;
+            background: #e5e7eb;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-100 min-h-screen">
+<!-- Navigation Header -->
+<header class="border-b border-stone-200 dark:border-stone-800 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="text-2xl font-bold tracking-tighter text-primary">GLAMOUR STUDIO</span>
+</div>
+<div class="flex items-center space-x-6 text-sm font-medium tracking-wide">
+<a class="hover:text-primary transition-colors" href="#">INICIO</a>
+<a class="hover:text-primary transition-colors" href="#">SERVICIOS</a>
+<a class="hover:text-primary transition-colors" href="#">GALERÍA</a>
+<a class="text-primary border-b-2 border-primary" href="#">RESERVAR</a>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 py-12">
+<!-- Stepper -->
+<div class="max-w-4xl mx-auto mb-16 relative">
+<div class="progress-line"></div>
+<div class="relative z-10 flex justify-between">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20">1</div>
+<span class="mt-2 text-xs font-bold uppercase tracking-widest">Servicio</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-stone-800 border-2 border-primary text-primary flex items-center justify-center font-bold">2</div>
+<span class="mt-2 text-xs font-bold uppercase tracking-widest text-stone-400">Fecha y Hora</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center font-bold">3</div>
+<span class="mt-2 text-xs font-bold uppercase tracking-widest text-stone-400">Tus Datos</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center font-bold">4</div>
+<span class="mt-2 text-xs font-bold uppercase tracking-widest text-stone-400">Confirmación</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Left Panel: Content -->
+<div class="lg:col-span-8 space-y-12">
+<!-- Section 1: Categories -->
+<section>
+<div class="mb-6">
+<h2 class="text-3xl font-light tracking-tight dark:text-white">Selecciona tu <span class="font-bold">Experiencia</span></h2>
+<p class="text-stone-500 dark:text-stone-400 mt-2">Elige el servicio premium que deseas realizar hoy.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Category Card -->
+<div class="group relative bg-white dark:bg-stone-900 border-2 border-primary p-6 rounded-xl cursor-pointer transition-all hover:shadow-xl">
+<div class="absolute top-4 right-4 text-primary">
+<span class="material-icons">check_circle</span>
+</div>
+<h3 class="text-lg font-bold mb-1">Coloración Premium</h3>
+<p class="text-sm text-stone-500 dark:text-stone-400 mb-4">Tinte completo, balayage o reflejos con productos orgánicos.</p>
+<div class="flex justify-between items-center">
+<span class="text-stone-400 text-sm">90 min</span>
+<span class="font-bold text-primary">Desde $85.00</span>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-6 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+<h3 class="text-lg font-bold mb-1">Corte &amp; Styling</h3>
+<p class="text-sm text-stone-500 dark:text-stone-400 mb-4">Corte de diseño, lavado capilar y secado profesional.</p>
+<div class="flex justify-between items-center">
+<span class="text-stone-400 text-sm">45 min</span>
+<span class="font-bold">Desde $45.00</span>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-6 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+<h3 class="text-lg font-bold mb-1">Tratamiento Hidratante</h3>
+<p class="text-sm text-stone-500 dark:text-stone-400 mb-4">Mascarilla de keratina y vapor ozonizado.</p>
+<div class="flex justify-between items-center">
+<span class="text-stone-400 text-sm">60 min</span>
+<span class="font-bold">Desde $60.00</span>
+</div>
+</div>
+<div class="group relative bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-6 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+<h3 class="text-lg font-bold mb-1">Peinado de Gala</h3>
+<p class="text-sm text-stone-500 dark:text-stone-400 mb-4">Recogidos artísticos para eventos especiales.</p>
+<div class="flex justify-between items-center">
+<span class="text-stone-400 text-sm">75 min</span>
+<span class="font-bold">Desde $75.00</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Calendar and Time (Simulated) -->
+<section class="pt-8 border-t border-stone-200 dark:border-stone-800">
+<div class="mb-6">
+<h2 class="text-2xl font-light tracking-tight dark:text-white">Fecha y <span class="font-bold">Horario</span></h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white dark:bg-stone-900 p-8 rounded-xl shadow-sm border border-stone-100 dark:border-stone-800">
+<!-- Calendar Placeholder -->
+<div class="space-y-4">
+<div class="flex justify-between items-center mb-4">
+<span class="font-bold text-sm uppercase tracking-widest">Octubre 2023</span>
+<div class="flex space-x-2">
+<button class="p-1 rounded hover:bg-stone-100 dark:hover:bg-stone-800"><span class="material-icons text-sm">chevron_left</span></button>
+<button class="p-1 rounded hover:bg-stone-100 dark:hover:bg-stone-800"><span class="material-icons text-sm">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-stone-400 mb-2">
+<div>LU</div><div>MA</div><div>MI</div><div>JU</div><div>VI</div><div>SA</div><div>DO</div>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<!-- Calendar Grid Mockup -->
+<div class="h-10 flex items-center justify-center text-stone-300">28</div>
+<div class="h-10 flex items-center justify-center text-stone-300">29</div>
+<div class="h-10 flex items-center justify-center text-stone-300">30</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">1</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">2</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">3</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">4</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">5</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">6</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 bg-primary font-bold text-white rounded shadow-md">7</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">8</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">9</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">10</div>
+<div class="h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded">11</div>
+</div>
+</div>
+<!-- Time Slots -->
+<div class="space-y-4">
+<span class="font-bold text-sm uppercase tracking-widest block mb-4">Horas Disponibles</span>
+<div class="grid grid-cols-2 gap-3">
+<button class="py-3 px-4 rounded border border-accent-pink bg-accent-pink dark:bg-stone-800 dark:border-stone-700 text-sm font-medium hover:border-primary transition-colors">09:00 AM</button>
+<button class="py-3 px-4 rounded border border-primary bg-primary text-white text-sm font-bold shadow-sm">10:30 AM</button>
+<button class="py-3 px-4 rounded border border-accent-pink bg-accent-pink dark:bg-stone-800 dark:border-stone-700 text-sm font-medium hover:border-primary transition-colors">12:00 PM</button>
+<button class="py-3 px-4 rounded border border-accent-pink bg-accent-pink dark:bg-stone-800 dark:border-stone-700 text-sm font-medium hover:border-primary transition-colors">02:30 PM</button>
+<button class="py-3 px-4 rounded border border-stone-100 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 text-stone-300 text-sm font-medium cursor-not-allowed">04:00 PM</button>
+<button class="py-3 px-4 rounded border border-accent-pink bg-accent-pink dark:bg-stone-800 dark:border-stone-700 text-sm font-medium hover:border-primary transition-colors">05:30 PM</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Customer Form -->
+<section class="pt-8 border-t border-stone-200 dark:border-stone-800">
+<div class="mb-6">
+<h2 class="text-2xl font-light tracking-tight dark:text-white">Tus <span class="font-bold">Datos</span></h2>
+</div>
+<div class="bg-white dark:bg-stone-900 p-8 rounded-xl border border-stone-100 dark:border-stone-800">
+<form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-stone-500">Nombre Completo</label>
+<input class="w-full bg-stone-50 dark:bg-stone-800 border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/50 outline-none transition-all" placeholder="Ej. Isabella Martínez" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-stone-500">Correo Electrónico</label>
+<input class="w-full bg-stone-50 dark:bg-stone-800 border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/50 outline-none transition-all" placeholder="isabella@glamour.com" type="email"/>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-xs font-bold uppercase tracking-wider text-stone-500">Número de Teléfono</label>
+<input class="w-full bg-stone-50 dark:bg-stone-800 border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/50 outline-none transition-all" placeholder="+34 600 000 000" type="tel"/>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-xs font-bold uppercase tracking-wider text-stone-500">Notas Adicionales (Opcional)</label>
+<textarea class="w-full bg-stone-50 dark:bg-stone-800 border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/50 outline-none transition-all" placeholder="Cuéntanos algún detalle importante sobre tu cabello..." rows="3"></textarea>
+</div>
+</form>
+</div>
+</section>
+</div>
+<!-- Right Panel: Summary Sidebar -->
+<aside class="lg:col-span-4 sticky top-32">
+<div class="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl border border-stone-100 dark:border-stone-800 overflow-hidden">
+<div class="p-6 border-b border-stone-100 dark:border-stone-800">
+<h2 class="text-lg font-bold tracking-tight uppercase">Resumen de Reserva</h2>
+</div>
+<div class="p-8 space-y-6">
+<div class="flex items-start space-x-4">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of beautiful dyed hair texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEF9MCVxgtZLWBCRKHnAlzpCdx3u0PY6FIFaKSJuqoEI1t6Oh5cDT7S2lZkC925nwyMTzyE4-iCvOBcE-uOSxH_f4lPmzJRhWMRb59vha1RWlFeYUC51dkMAodudM4F0_AeZxPG-WiwLY30s48xc3jt6l8o2d2fNgpYk6YI2yqA0rJUShm5gN9j_EON_bsJBN_Zgr6PA0_-xFAVi8aL5IEUxgt5szP3v2dtha6Re9bPM9fjezGirYgL5giktS-yDeZtQL_JZPUhLHq"/>
+</div>
+<div>
+<p class="text-xs font-bold text-primary uppercase tracking-widest">Servicio</p>
+<h4 class="font-bold text-lg leading-tight">Coloración Premium</h4>
+<p class="text-xs text-stone-400">90 min de tratamiento</p>
+</div>
+</div>
+<div class="space-y-4 py-6 border-y border-stone-50 dark:border-stone-800">
+<div class="flex justify-between items-center">
+<div class="flex items-center space-x-2">
+<span class="material-icons text-primary text-lg">calendar_today</span>
+<span class="text-sm font-medium">Fecha:</span>
+</div>
+<span class="text-sm font-bold">Viernes, 7 Octubre 2023</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center space-x-2">
+<span class="material-icons text-primary text-lg">schedule</span>
+<span class="text-sm font-medium">Hora:</span>
+</div>
+<span class="text-sm font-bold">10:30 AM</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center space-x-2">
+<span class="material-icons text-primary text-lg">person</span>
+<span class="text-sm font-medium">Estilista:</span>
+</div>
+<span class="text-sm font-bold">Cualquier Profesional</span>
+</div>
+</div>
+<div class="pt-2">
+<div class="flex justify-between items-center mb-8">
+<span class="text-xl font-light">Total Estimado</span>
+<span class="text-2xl font-bold text-stone-900 dark:text-white">$85.00</span>
+</div>
+<button class="w-full gold-gradient text-white py-5 rounded-xl font-bold uppercase tracking-[0.2em] shadow-xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                Continuar Reserva
+                            </button>
+<p class="text-[10px] text-center text-stone-400 mt-6 uppercase tracking-widest">
+                                Pago presencial al finalizar el servicio
+                            </p>
+</div>
+</div>
+</div>
+<div class="mt-8 p-6 bg-accent-pink dark:bg-stone-800/50 rounded-xl border border-primary/20 flex items-center space-x-4">
+<span class="material-icons text-primary">verified_user</span>
+<p class="text-xs leading-relaxed text-stone-600 dark:text-stone-400">
+<span class="font-bold block">Reserva Protegida</span>
+                        Puedes cancelar o reprogramar hasta 24 horas antes sin cargo adicional.
+                    </p>
+</div>
+</aside>
+</div>
+<!-- En el resumen, añade clases para identificar elementos -->
+<div class="resumen-servicio">
+    <h4 class="font-bold text-lg leading-tight">Coloración Premium</h4>
+    <p class="precio text-xs text-stone-400">90 min de tratamiento</p>
+</div>
+
+<!-- Para la fecha -->
+<span class="resumen-fecha text-sm font-bold">Viernes, 7 Octubre 2023</span>
+
+<!-- Para la hora -->
+<span class="resumen-hora text-sm font-bold">10:30 AM</span>
+</main>
+<footer class="mt-24 py-12 border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900">
+<div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+<div class="mb-6 md:mb-0">
+<span class="text-xl font-bold tracking-tighter text-stone-400">GLAMOUR STUDIO</span>
+</div>
+<div class="flex space-x-8 text-xs font-bold text-stone-400 tracking-widest uppercase">
+<a class="hover:text-primary" href="#">Términos</a>
+<a class="hover:text-primary" href="#">Privacidad</a>
+<a class="hover:text-primary" href="#">Contacto</a>
+<a class="hover:text-primary" href="#">Instagram</a>
+</div>
+<div class="mt-6 md:mt-0 text-[10px] text-stone-400 uppercase tracking-widest">
+                © 2023 Glamour Studio Luxury Salon. Todos los derechos reservados.
+            </div>
+</div>
+</footer>
+<script src="reserva.js"></script>
+</body></html>

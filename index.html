@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Glamour Studio | Luxury Beauty Salon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "primary": "#ee2b7c",
+                  "background-light": "#f8f6f7",
+                  "background-dark": "#221018",
+                  "gold-light": "#f3e1ad",
+                  "gold-dark": "#c5a059",
+                  "soft-pink": "#fff0f5",
+                },
+                fontFamily: {
+                  "display": ["Manrope", "sans-serif"],
+                  "serif": ["Playfair Display", "serif"]
+                },
+                borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+              },
+            },
+          }
+    </script>
+<style type="text/tailwindcss">
+        .gold-gradient {
+            background: linear-gradient(135deg, #f3e1ad 0%, #c5a059 100%);
+        }
+        .soft-overlay {
+            background: linear-gradient(to bottom, rgba(248, 246, 247, 0.4) 0%, rgba(248, 246, 247, 0.8) 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 30px -5px rgba(238, 43, 124, 0.05);
+        }
+        .pink-hover-overlay {
+            background: rgba(238, 43, 124, 0.85);
+        }
+        .testimonial-glow {
+            box-shadow: 0 0 40px rgba(243, 225, 173, 0.15);
+        }
+
+/* ===== ESTILOS PARA EL CARRUSEL DE SERVICIOS ===== */
+
+/* Contenedor principal que agrupa el carrusel y los dots */
+.services-carousel-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem; /* Espacio para los dots */
+}
+
+/* Wrapper con scroll-snap horizontal - SIN BARRA VISIBLE */
+.services-carousel-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 2rem; /* Espacio entre tarjetas */
+    padding-bottom: 0; /* Quitamos el padding */
+    
+    /* Ocultar scrollbar en todos los navegadores */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    
+    scroll-behavior: smooth;
+}
+
+/* Ocultar scrollbar en Chrome/Safari */
+.services-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Tarjetas: cada una ocupa el ancho necesario y es un punto de snap */
+.service-card {
+    flex: 0 0 auto;
+    width: 100%; /* Por defecto, en móvil ocupa el ancho completo */
+    max-width: 350px; /* Ancho máximo para desktop */
+    scroll-snap-align: start;
+}
+
+/* Responsive: en móvil mostramos 1 tarjeta (ancho completo) */
+@media (min-width: 640px) {
+    .service-card {
+        max-width: 400px; /* Un poco más grande en tablets */
+    }
+}
+
+/* Responsive: en desktop mostramos que quepan 3 tarjetas con su gap */
+@media (min-width: 1024px) {
+    .service-card {
+        max-width: 350px; /* Se ajusta para que quepan 3 cómodamente */
+    }
+}
+
+/* Contenedor de los dots */
+.services-dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Estilo base de cada dot */
+.service-dot {
+    width: 3rem;
+    height: 0.375rem; /* Línea pequeña */
+    border-radius: 9999px;
+    background-color: #d1d5db; /* Gris claro */
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+/* Dot activo */
+.service-dot.active {
+    background: linear-gradient(135deg, #f3e1ad 0%, #c5a059 100%); /* Tu gold-gradient */
+    width: 4rem; /* Un poco más largo */
+    opacity: 1;
+}
+
+/* Estilo para las flechas de navegación */
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    background-color: white;
+    border: 1px solid rgba(238, 43, 124, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ee2b7c; /* primary */
+    transition: all 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 10;
+}
+
+.services-carousel-container:hover .carousel-arrow {
+    opacity: 1;
+    visibility: visible;
+}
+
+.carousel-arrow:hover {
+    background-color: #ee2b7c;
+    color: white;
+    border-color: #ee2b7c;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-arrow-prev {
+    left: -1.5rem;
+}
+
+.carousel-arrow-next {
+    right: -1.5rem;
+}
+
+/* Ajuste para que las flechas no se salgan en móvil */
+@media (max-width: 768px) {
+    .carousel-arrow {
+        display: none; /* Las ocultamos en móvil, se usa swipe */
+    }
+}
+
+/* Respetar prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .services-carousel-wrapper {
+        scroll-behavior: auto;
+    }
+    .service-dot {
+        transition: none;
+    }
+}
+/* ===== FIN ESTILOS CARRUSEL ===== */   
+
+/* ===== ESTILOS PARA EL CARRUSEL DE TRABAJOS ===== */
+
+/* Contenedor principal */
+.works-carousel-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* Wrapper con scroll-snap horizontal - SIN BARRA DE SCROLL VISIBLE */
+.works-carousel-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem; /* Espacio entre tarjetas */
+    padding-bottom: 0; /* Quitamos el padding que daba espacio para la barra */
+    
+    /* OCULTAR COMPLETAMENTE LA BARRA DE SCROLL */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    
+    scroll-behavior: smooth;
+}
+
+/* Ocultar scrollbar en Chrome/Safari/Opera */
+.works-carousel-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Tarjetas de trabajo */
+.work-card {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 400px; /* Ancho base */
+    scroll-snap-align: start;
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+    .work-card {
+        max-width: 350px; /* Tablets: 2 tarjetas */
+    }
+}
+
+@media (min-width: 1024px) {
+    .work-card {
+        max-width: 380px; /* Desktop: 3 tarjetas */
+    }
+}
+
+/* Contenedor de dots */
+.works-dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+}
+
+/* Estilo base de cada dot (círculos) */
+.work-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 9999px;
+    background-color: #d1d5db; /* Gris claro */
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+/* Dot activo */
+.work-dot.active {
+    background: linear-gradient(135deg, #f3e1ad 0%, #c5a059 100%);
+    width: 1rem;
+    height: 1rem;
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* ===== FLECHAS DEL CARRUSEL DE TRABAJOS - VISIBLES SIEMPRE ===== */
+.works-carousel-container {
+    position: relative !important;
+    overflow: visible !important;  /* Cambiado de hidden a visible */
+}
+
+.works-arrow {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 9999px !important;
+    background-color: white !important;
+    border: 2px solid #ee2b7c !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    color: #ee2b7c !important;
+    z-index: 1000 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.works-arrow-prev {
+    left: 10px !important;
+}
+
+.works-arrow-next {
+    right: 10px !important;
+}
+
+.works-arrow:hover {
+    background-color: #ee2b7c !important;
+    color: white !important;
+    transform: translateY(-50%) scale(1.05) !important;
+}
+
+/* Para móvil, si querés ocultarlas */
+@media (max-width: 768px) {
+    .works-arrow {
+        display: none !important;
+    }
+}
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
+<header class="fixed top-0 left-0 right-0 z-50 px-8 py-6">
+<nav class="max-w-7xl mx-auto flex items-center justify-between bg-white/70 dark:bg-background-dark/70 backdrop-blur-md px-8 py-4 rounded-full border border-primary/10 shadow-sm">
+<div class="flex items-center gap-2">
+<span class="text-2xl font-serif font-bold text-primary italic">GS</span>
+<span class="text-lg font-bold tracking-tight text-neutral-900 dark:text-white uppercase">Glamour Studio</span>
+</div>
+<ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
+<li><a class="text-primary hover:opacity-70 transition-all" href="#">Inicio</a></li>
+<li><a class="hover:text-primary transition-all" href="#servicios">Servicios</a></li>
+<li><a class="hover:text-primary transition-all" href="#equipo">Equipo</a></li>
+<li><a class="hover:text-primary transition-all" href="#testimonios">Opiniones</a></li>
+<li><a class="hover:text-primary transition-all" href="#trabajos">Galería</a></li>
+<li><a class="hover:text-primary transition-all" href="reserva.html">Hace tu Reserva</a></li>
+<li><a class="hover:text-primary transition-all" href="#contacto">Contacto</a></li>
+</ul>
+</nav>
+</header>
+
+<!-- HERO SECTION (SIN MAIN) -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Luxury Salon Interior" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgp1ltEFrW1mfe1D7opwyXfdi8DLNTFaxCHeDOuIGV17LdIIQGuQ8obVgh032OXSIV50AGyTBhi4JA_ll05QmUWP90UA2qzGbiZgCgvO8UUhTk50C9_bO8iq9eAcbw-IRvRJ6p3ImZplBRldxL6pgWZ8hUb3Nj3PCR8ys6iBl_BqOnbTs48dIaLmIviLliuK444Z2Z9zXAwm_XcxnRSlNqJd3iPCVfscsQkt_2MJeqoZuW3n5_xxLeR2XGcVCSerGEj86lI0tdXJEo"/>
+<div class="absolute inset-0 bg-background-light/40 dark:bg-background-dark/60"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-light via-transparent to-transparent dark:from-background-dark"></div>
+</div>
+<div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+<div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-primary">Experiencia Exclusive</span>
+</div>
+<h1 class="text-6xl md:text-8xl lg:text-9xl font-serif text-neutral-900 dark:text-white mb-6 leading-tight">
+            Glamour <span class="italic text-primary">Studio</span>
+</h1>
+<p class="text-xl md:text-2xl font-light tracking-[0.15em] text-neutral-600 dark:text-neutral-300 mb-12 uppercase">
+            Realza tu belleza natural
+        </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<a class="gold-gradient text-neutral-900 px-10 py-5 rounded-full font-bold text-lg shadow-xl shadow-gold-dark/20 hover:scale-105 active:scale-95 transition-transform flex items-center gap-2" href="reserva.html">
+    Reserva tu cita
+    <span class="material-icons text-xl">calendar_today</span>
+</a>
+<a class="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 font-semibold hover:text-primary transition-colors px-6 py-5" href="#servicios">
+                Ver servicios
+                <span class="material-icons">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+
+<!-- SECCIÓN DE SERVICIOS -->
+<section class="py-32 px-8 bg-white dark:bg-background-dark relative overflow-hidden" id="servicios">
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-gold-light/10 rounded-full blur-3xl"></div>
+    
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-20">
+            <h2 class="text-4xl md:text-5xl font-serif text-neutral-900 dark:text-white mb-4">Nuestros Servicios</h2>
+            <p class="text-lg md:text-xl font-serif italic text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto">
+                Descubre una experiencia de belleza personalizada, diseñada para resaltar tu elegancia natural en cada detalle.
+            </p>
+        </div>
+
+               <!-- ===== NUEVO CARRUSEL ===== -->
+        <!-- Contenedor principal del carrusel -->
+        <div class="services-carousel-container relative">
+            <!-- Wrapper con scroll-snap -->
+            <div class="services-carousel-wrapper">
+                <!-- Tarjeta 1 (Cortes de cabello) -->
+                <div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+                        <img alt="Cortes de cabello" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDybG6B0Olommrohgs0ZjqHIVKEtAB2I1WOGrYolgYMHmsdICewWUsgOu0OqwWgIy5_7Ftqu-OpA1dYkGJf8ZbY4vVg7sxtsn2qQBBiYW2xA9B5bqqZvhpmGU7dlkbNnsOuBATMw_n0bRqsviBvRQQSQmGpAFJJ0G5c2L86KFXowzAqkme-6mE_mBAxq6j7g-8gOJ9J048rGiggQGmO2TiRInciaFR8xm2Cy6KSruSwj1tZ44-0oy96c5xeDGg-RCYynXnzdmRWT0_5"/>
+                    </div>
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+                            <span class="material-symbols-outlined text-3xl">content_cut</span>
+                        </div>
+                        <span class="text-primary font-bold text-lg">Desde $30</span>
+                    </div>
+                    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Cortes de cabello</h3>
+                    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Diseños vanguardistas y clásicos adaptados a tu estilo personal y fisionomía.</p>
+                    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+                </div>
+                <!-- Tarjeta 2 (Coloración) -->
+                <div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+                        <img alt="Coloración" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgp1ltEFrW1mfe1D7opwyXfdi8DLNTFaxCHeDOuIGV17LdIIQGuQ8obVgh032OXSIV50AGyTBhi4JA_ll05QmUWP90UA2qzGbiZgCgvO8UUhTk50C9_bO8iq9eAcbw-IRvRJ6p3ImZplBRldxL6pgWZ8hUb3Nj3PCR8ys6iBl_BqOnbTs48dIaLmIviLliuK444Z2Z9zXAwm_XcxnRSlNqJd3iPCVfscsQkt_2MJeqoZuW3n5_xxLeR2XGcVCSerGEj86lI0tdXJEo"/>
+                    </div>
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+                            <span class="material-symbols-outlined text-3xl">water_drop</span>
+                        </div>
+                        <span class="text-primary font-bold text-lg">Desde $65</span>
+                    </div>
+                    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Coloración</h3>
+                    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Técnicas premium de coloración, balayage y reflejos con productos de alta gama.</p>
+                    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+                </div>
+                <!-- Tarjeta 3 (Peinados) -->
+                <div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+                    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+                        <img alt="Peinados" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaHdtsIummVMzLncpY_UNN2eO96gIP2fGGa1GD6J-H11_lOg0V9eETOjN9HSp711YMldgUJKTPn354R6HTPpsb66nnP6y_vnqB89kBDxj6A7GlklYQLroK7o4WCy59LvfmWifE6eFDAOWzIK8_j1ko1oiZiobHwuaAnJ4IKOChmDb-jKlyvZbn2qcy62I6gQxs6E_UmLqROAPEfyzbneMA8rvcmlibz5vjiwdkLhg96oBZs7_bp0gooU71YCRorp6-lXfLhbjBYNDW"/>
+                    </div>
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+                            <span class="material-symbols-outlined text-3xl">air</span>
+                        </div>
+                        <span class="text-primary font-bold text-lg">Desde $45</span>
+                    </div>
+                    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Peinados</h3>
+                    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Styling profesional para eventos especiales, novias o tu día a día con un toque chic.</p>
+                    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+                </div>
+                <!-- Tarjeta 4 (Maquillaje Profesional) - NUEVA -->
+<div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+        <img alt="Maquillaje Profesional" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+    </div>
+    <div class="flex items-start justify-between mb-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+            <span class="material-symbols-outlined text-3xl">face</span>
+        </div>
+        <span class="text-primary font-bold text-lg">Desde $50</span>
+    </div>
+    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Maquillaje Profesional</h3>
+    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Maquillaje social, novias y eventos especiales con productos de alta gama.</p>
+    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+</div>
+
+<!-- Tarjeta 5 (Tratamientos Capilares) - NUEVA -->
+<div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+        <img alt="Tratamientos Capilares" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+    </div>
+    <div class="flex items-start justify-between mb-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+            <span class="material-symbols-outlined text-3xl">spa</span>
+        </div>
+        <span class="text-primary font-bold text-lg">Desde $40</span>
+    </div>
+    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Tratamientos Capilares</h3>
+    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Hidratación, nutrición y reparación profunda para tu cabello.</p>
+    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+</div>
+
+<!-- Tarjeta 6 (Depilación) - NUEVA -->
+<div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+        <img alt="Depilación" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+    </div>
+    <div class="flex items-start justify-between mb-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+            <span class="material-symbols-outlined text-3xl">water_drop</span>
+        </div>
+        <span class="text-primary font-bold text-lg">Desde $25</span>
+    </div>
+    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Depilación</h3>
+    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Técnicas de cera y depilación definitiva para una piel suave.</p>
+    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+</div>
+
+<!-- Tarjeta 7 (Manicura y Pedicura) - CORREGIDA -->
+<div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+        <img alt="Manicura y Pedicura" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://images.unsplash.com/photo-1522337360781-4b0c3d033103?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+    </div>
+    <div class="flex items-start justify-between mb-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+            <span class="material-symbols-outlined text-3xl">spa</span>
+        </div>
+        <span class="text-primary font-bold text-lg">Desde $35</span>
+    </div>
+    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Manicura y Pedicura</h3>
+    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Esmaltado semipermanente, kapping y cuidado de uñas.</p>
+    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+</div>
+
+<!-- Tarjeta 8 (Masajes) - NUEVA -->
+<div class="service-card bg-white dark:bg-neutral-800 rounded-lg p-6 card-shadow border border-primary/5 group hover:-translate-y-2 transition-all duration-300">
+    <div class="relative h-64 mb-8 overflow-hidden rounded-md">
+        <img alt="Masajes" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+    </div>
+    <div class="flex items-start justify-between mb-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gold-light/20 text-gold-dark">
+            <span class="material-symbols-outlined text-3xl">self_improvement</span>
+        </div>
+        <span class="text-primary font-bold text-lg">Desde $45</span>
+    </div>
+    <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-3">Masajes</h3>
+    <p class="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed mb-6">Masajes relajantes y descontracturantes para tu bienestar.</p>
+    <div class="h-1 w-12 bg-gold-dark/40 group-hover:w-full transition-all duration-300"></div>
+</div>
+            </div> <!-- ESTE ES EL CIERRE CORRECTO de services-carousel-wrapper -->
+
+            <!-- Indicadores de progreso (dots) - AHORA ESTÁN FUERA DEL WRAPPER PERO DENTRO DEL CONTENEDOR PRINCIPAL -->
+            <div class="services-dots-container">
+                <!-- Los dots se generarán con JS -->
+            </div>
+
+            <!-- Flechas de navegación - AHORA DENTRO del contenedor principal y DESPUÉS de los dots -->
+            <button class="carousel-arrow carousel-arrow-prev" aria-label="Servicio anterior">
+                <span class="material-icons">chevron_left</span>
+            </button>
+            <button class="carousel-arrow carousel-arrow-next" aria-label="Siguiente servicio">
+                <span class="material-icons">chevron_right</span>
+            </button>
+        </div> <!-- ESTE ES EL CIERRE de services-carousel-container -->
+        <!-- ===== FIN DEL NUEVO CARRUSEL ===== -->
+    </div>
+</section>
+
+<!-- SECCIÓN DE TRABAJOS -->
+<section class="py-32 px-8 bg-background-light dark:bg-background-dark overflow-hidden" id="trabajos">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-serif text-neutral-900 dark:text-white mb-4">Nuestros Trabajos</h2>
+            <div class="w-24 h-1 bg-gold-dark mx-auto mb-8"></div>
+        </div>
+
+<!-- ===== CARRUSEL DE TRABAJOS ===== -->
+<div class="works-carousel-container relative">
+    <!-- Wrapper con scroll-snap -->
+    <div class="works-carousel-wrapper">
+        <!-- Trabajo 1 - Corte Moderno (existente) -->
+        <div class="work-card group relative aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200 cursor-pointer shadow-lg">
+            <img alt="Corte Moderno" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDybG6B0Olommrohgs0ZjqHIVKEtAB2I1WOGrYolgYMHmsdICewWUsgOu0OqwWgIy5_7Ftqu-OpA1dYkGJf8ZbY4vVg7sxtsn2qQBBiYW2xA9B5bqqZvhpmGU7dlkbNnsOuBATMw_n0bRqsviBvRQQSQmGpAFJJ0G5c2L86KFXowzAqkme-6mE_mBAxq6j7g-8gOJ9J048rGiggQGmO2TiRInciaFR8xm2Cy6KSruSwj1tZ44-0oy96c5xeDGg-RCYynXnzdmRWT0_5"/>
+            <div class="absolute inset-0 pink-hover-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-6 text-center">
+                <h3 class="text-white text-3xl font-serif mb-2 tracking-wide">Corte Moderno</h3>
+                <p class="text-gold-light font-medium tracking-widest uppercase text-xs">Estilo Vanguardista</p>
+            </div>
+        </div>
+
+        <!-- Trabajo 2 - Peinado de Novia (existente) -->
+        <div class="work-card group relative aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200 cursor-pointer shadow-lg">
+            <img alt="Peinado de Novia" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaHdtsIummVMzLncpY_UNN2eO96gIP2fGGa1GD6J-H11_lOg0V9eETOjN9HSp711YMldgUJKTPn354R6HTPpsb66nnP6y_vnqB89kBDxj6A7GlklYQLroK7o4WCy59LvfmWifE6eFDAOWzIK8_j1ko1oiZiobHwuaAnJ4IKOChmDb-jKlyvZbn2qcy62I6gQxs6E_UmLqROAPEfyzbneMA8rvcmlibz5vjiwdkLhg96oBZs7_bp0gooU71YCRorp6-lXfLhbjBYNDW"/>
+            <div class="absolute inset-0 pink-hover-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-6 text-center">
+                <h3 class="text-white text-3xl font-serif mb-2 tracking-wide">Peinado de Novia</h3>
+                <p class="text-gold-light font-medium tracking-widest uppercase text-xs">Elegancia Atemporal</p>
+            </div>
+        </div>
+
+        <!-- Trabajo 3 - Coloración Balayage (nuevo - basado en imagen existente) -->
+        <div class="work-card group relative aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200 cursor-pointer shadow-lg">
+            <img alt="Coloración Balayage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgp1ltEFrW1mfe1D7opwyXfdi8DLNTFaxCHeDOuIGV17LdIIQGuQ8obVgh032OXSIV50AGyTBhi4JA_ll05QmUWP90UA2qzGbiZgCgvO8UUhTk50C9_bO8iq9eAcbw-IRvRJ6p3ImZplBRldxL6pgWZ8hUb3Nj3PCR8ys6iBl_BqOnbTs48dIaLmIviLliuK444Z2Z9zXAwm_XcxnRSlNqJd3iPCVfscsQkt_2MJeqoZuW3n5_xxLeR2XGcVCSerGEj86lI0tdXJEo"/>
+            <div class="absolute inset-0 pink-hover-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-6 text-center">
+                <h3 class="text-white text-3xl font-serif mb-2 tracking-wide">Coloración Balayage</h3>
+                <p class="text-gold-light font-medium tracking-widest uppercase text-xs">Técnica Francesa</p>
+            </div>
+        </div>
+
+        <!-- Trabajo 4 - NUEVO (placeholder) -->
+        <div class="work-card group relative aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200 cursor-pointer shadow-lg">
+            <img alt="Maquillaje Profesional" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+            <div class="absolute inset-0 pink-hover-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-6 text-center">
+                <h3 class="text-white text-3xl font-serif mb-2 tracking-wide">Maquillaje Profesional</h3>
+                <p class="text-gold-light font-medium tracking-widest uppercase text-xs">Bridal & Social</p>
+            </div>
+        </div>
+
+        <!-- Trabajo 5 - NUEVO (placeholder) -->
+        <div class="work-card group relative aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200 cursor-pointer shadow-lg">
+            <img alt="Tratamiento Capilar" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+            <div class="absolute inset-0 pink-hover-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-6 text-center">
+                <h3 class="text-white text-3xl font-serif mb-2 tracking-wide">Tratamiento Capilar</h3>
+                <p class="text-gold-light font-medium tracking-widest uppercase text-xs">Nutrición & Reparación</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicadores de progreso (dots) -->
+    <div class="works-dots-container">
+        <!-- Los dots se generarán con JS -->
+    </div>
+
+    <!-- Flechas de navegación - AHORA DENTRO del contenedor (corregido) -->
+    <button class="works-arrow works-arrow-prev" aria-label="Trabajo anterior">
+        <span class="material-icons">chevron_left</span>
+    </button>
+    <button class="works-arrow works-arrow-next" aria-label="Siguiente trabajo">
+        <span class="material-icons">chevron_right</span>
+    </button>
+</div>
+<!-- ===== FIN DEL CARRUSEL DE TRABAJOS ===== -->
+    </div>
+</section>
+
+<!-- SECCIÓN DE EQUIPO -->
+<section class="py-32 px-8 bg-soft-pink dark:bg-neutral-900/20 overflow-hidden" id="equipo">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="text-4xl md:text-5xl font-serif text-neutral-900 dark:text-white mb-4">Nuestro Equipo Estilista</h2>
+<div class="w-16 h-1 gold-gradient mx-auto"></div>
+</div>
+
+<!-- CONTENEDOR HORIZONTAL CON SCROLL Y FLECHAS -->
+<div class="team-carousel-container relative" style="overflow: visible; padding: 0 40px;">
+    <!-- Wrapper con scroll horizontal -->
+    <div class="team-carousel-wrapper flex overflow-x-auto gap-8 pb-8" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
+        <!-- Miembro 1 - Existente -->
+        <div class="team-card flex-shrink-0 w-80 flex flex-col items-center text-center group">
+            <div class="w-64 h-64 rounded-full overflow-hidden mb-8 border-4 border-white shadow-xl relative transition-transform duration-500 group-hover:scale-105">
+                <img alt="Valentina Rossi" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1X2aNoFq9wXheaIIjptEvuTFuCf_eUSBp9boDgMN6ktg_nPxidneCMS-EaOO7ehXe_GiLOeKTgNXhzJZxs7hNQ2SnwJypf4Zl2XCeEVyUMhAohhHbu1L3XbruOn6y_A5OvKqIj0eypZ1wJMOJLnBC_XrFYxiFasRzx3G9IDbaFJK1JQkskp0GDCXmPdnNtdifNz223G_cdXegb5rxsbL4yQEiCdVP6Mcvs8F_7i5C7RLGMHngA6HP9t7puoD3D-Pn9uDfdWjxfdKo"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-2">Valentina Rossi</h3>
+            <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-2">Master Colorist</p>
+            <p class="text-neutral-500 dark:text-neutral-400 italic font-serif">12 Años de Experiencia</p>
+        </div>
+
+        <!-- Miembro 2 - Existente -->
+        <div class="team-card flex-shrink-0 w-80 flex flex-col items-center text-center group">
+            <div class="w-64 h-64 rounded-full overflow-hidden mb-8 border-4 border-white shadow-xl relative transition-transform duration-500 group-hover:scale-105">
+                <img alt="Julianne Smith" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbvoNs1hFcIZqH5_kOr96B5mhQNc4uwpiMjlQTz5d0qVMYLzjXTpmaQX-35mJ5uXpP8P9cC0XDOeNcgXsTONkGg8Ozf1FJjN4UqvFHWd13yMt44JH5SH2siyxcSBOB9wK1HNgdQWvcZq_3mzgLvX_wxWkUHWP4kPoueAi1_IELBW8jVx1I46cJKJCleFhuyiqqH9SyH3V8UKWqhQR9MWPp6jWi-MiwSHsfYcz0S3ypXNwSWzGXH9JE4EcPI6CqdRsh-xomY9ekRZDC"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-2">Julianne Smith</h3>
+            <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-2">Expert Stylist</p>
+            <p class="text-neutral-500 dark:text-neutral-400 italic font-serif">8 Años de Experiencia</p>
+        </div>
+
+        <!-- Miembro 3 - Existente -->
+        <div class="team-card flex-shrink-0 w-80 flex flex-col items-center text-center group">
+            <div class="w-64 h-64 rounded-full overflow-hidden mb-8 border-4 border-white shadow-xl relative transition-transform duration-500 group-hover:scale-105">
+                <img alt="Elena Castillo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBic9SaudC2TQ0ejAAf9hTBOl7JqgDrPwWnUWBsoyET3C_5uetUDuHHZVtZV5t6fwGS4Lji6iZFY4Yokz0H72LVjunkAwlDPezUTI3KElI7FVWE5hihEemQKnZDizqsKY-sho7l8vlxKtnBXK43cvpu4QYeLcj7Md_a4gzH2tABzR2ERt7gciRdtIVOsbsLETKS2iQBoniVZ37RTZ9r4MCpikY_gtGUiN5cRR2FM25fmsao_Ecx-ejvhG6btSV98aVxSIOkP4PvzBOn"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-2">Elena Castillo</h3>
+            <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-2">Makeup Artist</p>
+            <p class="text-neutral-500 dark:text-neutral-400 italic font-serif">10 Años de Experiencia</p>
+        </div>
+
+        <!-- NUEVO Miembro 4 - Isabella Méndez -->
+        <div class="team-card flex-shrink-0 w-80 flex flex-col items-center text-center group">
+            <div class="w-64 h-64 rounded-full overflow-hidden mb-8 border-4 border-white shadow-xl relative transition-transform duration-500 group-hover:scale-105">
+                <img alt="Isabella Méndez" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-2">Isabella Méndez</h3>
+            <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-2">Especialista en Balayage</p>
+            <p class="text-neutral-500 dark:text-neutral-400 italic font-serif">6 Años de Experiencia</p>
+        </div>
+
+        <!-- NUEVO Miembro 5 - Sofía Herrera -->
+        <div class="team-card flex-shrink-0 w-80 flex flex-col items-center text-center group">
+            <div class="w-64 h-64 rounded-full overflow-hidden mb-8 border-4 border-white shadow-xl relative transition-transform duration-500 group-hover:scale-105">
+                <img alt="Sofía Herrera" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-2">Sofía Herrera</h3>
+            <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-2">Stylista & Barbera</p>
+            <p class="text-neutral-500 dark:text-neutral-400 italic font-serif">5 Años de Experiencia</p>
+        </div>
+
+        <!-- NUEVO Miembro 6 - Camila Torres -->
+        <div class="team-card flex-shrink-0 w-80 flex flex-col items-center text-center group">
+            <div class="w-64 h-64 rounded-full overflow-hidden mb-8 border-4 border-white shadow-xl relative transition-transform duration-500 group-hover:scale-105">
+                <img alt="Camila Torres" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <h3 class="text-2xl font-serif text-neutral-900 dark:text-white mb-2">Camila Torres</h3>
+            <p class="text-primary font-semibold text-sm uppercase tracking-widest mb-2">Tratamientos Capilares</p>
+            <p class="text-neutral-500 dark:text-neutral-400 italic font-serif">7 Años de Experiencia</p>
+        </div>
+    </div>
+
+    <!-- Flechas de navegación (ahora con z-index alto y posicionamiento mejorado) -->
+    <button class="team-arrow team-arrow-prev absolute top-1/2 -translate-y-1/2 left-0 z-20 w-12 h-12 rounded-full bg-white border-2 border-primary shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all transform hover:scale-105" aria-label="Miembro anterior" style="margin-left: -20px;">
+        <span class="material-icons">chevron_left</span>
+    </button>
+    <button class="team-arrow team-arrow-next absolute top-1/2 -translate-y-1/2 right-0 z-20 w-12 h-12 rounded-full bg-white border-2 border-primary shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all transform hover:scale-105" aria-label="Siguiente miembro" style="margin-right: -20px;">
+        <span class="material-icons">chevron_right</span>
+    </button>
+</div>
+
+</div>
+</section>
+
+<!-- SECCIÓN DE TESTIMONIOS - VERSIÓN CON FADE -->
+<section class="py-32 px-8 bg-white dark:bg-background-dark overflow-hidden" id="testimonios">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-serif text-neutral-900 dark:text-white mb-4">Lo que dicen nuestras clientas</h2>
+<div class="w-24 h-1 bg-gold-dark mx-auto mb-8"></div>
+</div>
+
+<!-- CONTENEDOR DE TESTIMONIOS CON FADE -->
+<div class="relative max-w-4xl mx-auto h-[400px] md:h-[350px]">
+    
+    <!-- Testimonio 1 - Sofia M. -->
+    <div class="testimonial-item absolute inset-0 transition-opacity duration-1000 opacity-100" id="testimonio-1">
+        <div class="bg-background-light dark:bg-neutral-900/60 p-12 md:p-20 rounded-3xl testimonial-glow relative border border-primary/5 h-full flex items-center">
+            <div class="flex flex-col items-center text-center w-full">
+                <div class="w-20 h-20 rounded-full overflow-hidden mb-8 border-2 border-gold-dark p-1">
+                    <img alt="Clienta Sofia" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL9UdVkNxUQTDXPfXgB5NBX5_huSdsgkzS4m8EvkG7nQMHStN7ouRHbXwFLsNRH9YFdLtAN6A3jhrjoq6c-agQjTs62oc_u95fyGCBTdiRH06-YxadUaTmEdqqajbpK7Vdu34XdLKQAHB1g1sTLAex1y_0cl4gzLssux_OmIrmp9pngIsEpbLluhfyYRCUwBV1LNpk-BK6_PWunmH2PazsxM9Ssjp7zfC-gfdcuhI5BeRbVInStRR06V1eorS8sH68niczKxqQHmGI"/>
+                </div>
+                <div class="flex gap-1 mb-6">
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                </div>
+                <blockquote class="text-2xl md:text-3xl font-serif italic text-neutral-700 dark:text-neutral-200 mb-8 leading-relaxed">
+                    "Una experiencia verdaderamente transformadora. El nivel de atención al detalle y el ambiente de lujo hacen de Glamour Studio mi lugar favorito para consentirme."
+                </blockquote>
+                <cite class="not-italic font-bold tracking-widest uppercase text-sm text-neutral-900 dark:text-white">Sofia M. - Clienta Frecuente</cite>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Testimonio 2 - Nueva: Laura G. -->
+    <div class="testimonial-item absolute inset-0 transition-opacity duration-1000 opacity-0" id="testimonio-2">
+        <div class="bg-background-light dark:bg-neutral-900/60 p-12 md:p-20 rounded-3xl testimonial-glow relative border border-primary/5 h-full flex items-center">
+            <div class="flex flex-col items-center text-center w-full">
+                <div class="w-20 h-20 rounded-full overflow-hidden mb-8 border-2 border-gold-dark p-1">
+                    <img alt="Clienta Laura" class="w-full h-full object-cover rounded-full" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"/>
+                </div>
+                <div class="flex gap-1 mb-6">
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                </div>
+                <blockquote class="text-2xl md:text-3xl font-serif italic text-neutral-700 dark:text-neutral-200 mb-8 leading-relaxed">
+                    "El mejor salón de belleza donde he estado. Profesionales increíbles y resultados impecables. Volveré sin dudarlo."
+                </blockquote>
+                <cite class="not-italic font-bold tracking-widest uppercase text-sm text-neutral-900 dark:text-white">Laura G. - Cliente VIP</cite>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Testimonio 3 - Nueva: Carolina R. -->
+    <div class="testimonial-item absolute inset-0 transition-opacity duration-1000 opacity-0" id="testimonio-3">
+        <div class="bg-background-light dark:bg-neutral-900/60 p-12 md:p-20 rounded-3xl testimonial-glow relative border border-primary/5 h-full flex items-center">
+            <div class="flex flex-col items-center text-center w-full">
+                <div class="w-20 h-20 rounded-full overflow-hidden mb-8 border-2 border-gold-dark p-1">
+                    <img alt="Clienta Carolina" class="w-full h-full object-cover rounded-full" src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"/>
+                </div>
+                <div class="flex gap-1 mb-6">
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                    <span class="material-icons text-gold-dark">star</span>
+                </div>
+                <blockquote class="text-2xl md:text-3xl font-serif italic text-neutral-700 dark:text-neutral-200 mb-8 leading-relaxed">
+                    "Me encanta cómo me dejaron el cabello. El tratamiento de keratina fue maravilloso y la atención excelente. 100% recomendado."
+                </blockquote>
+                <cite class="not-italic font-bold tracking-widest uppercase text-sm text-neutral-900 dark:text-white">Carolina R. - Clienta Habitual</cite>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicadores (dots) -->
+    <div class="absolute bottom-[-50px] left-0 right-0 flex justify-center gap-3">
+        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 hover:bg-gold-dark active-dot" data-index="0"></button>
+        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 hover:bg-gold-dark" data-index="1"></button>
+        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 hover:bg-gold-dark" data-index="2"></button>
+    </div>
+</div>
+</div>
+</section>
+
+<!-- SECCIÓN DE CONTACTO -->
+<section class="py-32 px-8 bg-white dark:bg-background-dark" id="contacto">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+<div class="bg-background-light dark:bg-neutral-900/40 p-10 rounded-2xl border border-primary/5 shadow-sm">
+<h2 class="text-4xl font-serif text-neutral-900 dark:text-white mb-8">Contáctanos</h2>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2">Nombre</label>
+<input class="w-full bg-white dark:bg-background-dark border-primary/10 focus:border-primary/40 focus:ring-0 rounded-lg px-4 py-3 transition-colors" placeholder="Tu nombre" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2">Email</label>
+<input class="w-full bg-white dark:bg-background-dark border-primary/10 focus:border-primary/40 focus:ring-0 rounded-lg px-4 py-3 transition-colors" placeholder="tu@email.com" type="email"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2">Teléfono</label>
+<input class="w-full bg-white dark:bg-background-dark border-primary/10 focus:border-primary/40 focus:ring-0 rounded-lg px-4 py-3 transition-colors" placeholder="+34 000 000 000" type="tel"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2">Mensaje</label>
+<textarea class="w-full bg-white dark:bg-background-dark border-primary/10 focus:border-primary/40 focus:ring-0 rounded-lg px-4 py-3 transition-colors" placeholder="¿Cómo podemos ayudarte?" rows="4"></textarea>
+</div>
+<button class="w-full gold-gradient text-neutral-900 font-bold py-4 rounded-full shadow-lg hover:shadow-gold-dark/20 transition-all uppercase tracking-widest text-sm" type="submit">
+                        Enviar Mensaje
+                    </button>
+</form>
+</div>
+<div class="space-y-12">
+<div class="rounded-2xl overflow-hidden shadow-lg h-[400px] border border-primary/10">
+<div class="w-full h-full bg-neutral-200 dark:bg-neutral-800 relative">
+<iframe allowfullscreen="" class="w-full h-full grayscale-[50%] contrast-[1.1]" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.643324395646!2d-3.703790!3d40.416775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422891dcabcabc%3A0x123456789!2zTWFkcmlkLCBFc3Bhw7Fh!5e0!3m2!1ses!2ses!4v1700000000000!5m2!1ses!2ses" style="border:0;"></iframe>
+</div>
+</div>
+<div class="bg-primary/5 p-10 rounded-2xl border-l-4 border-gold-dark">
+<h3 class="text-3xl font-serif text-neutral-900 dark:text-white mb-6">Horarios de Atención</h3>
+<div class="space-y-4 font-serif text-lg italic text-neutral-600 dark:text-neutral-300">
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span>Lunes a Viernes</span>
+<span class="font-bold text-neutral-900 dark:text-white">9am - 8pm</span>
+</div>
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span>Sábados</span>
+<span class="font-bold text-neutral-900 dark:text-white">9am - 6pm</span>
+</div>
+<div class="flex justify-between items-center">
+<span>Domingos</span>
+<span class="text-primary font-bold uppercase text-sm tracking-widest">Cerrado</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer class="bg-white dark:bg-neutral-950 pt-24 pb-12 px-8 border-t border-primary/5">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
+<div class="space-y-6">
+<div class="flex items-center gap-2">
+<span class="text-3xl font-serif font-bold text-primary italic">GS</span>
+<span class="text-xl font-bold tracking-tight text-neutral-900 dark:text-white uppercase">Glamour Studio</span>
+</div>
+<p class="text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm">
+                Dedicados a elevar tu confianza a través de la belleza. Un santuario de elegancia y estilo en el corazón de la ciudad.
+            </p>
+<div class="flex items-center gap-4 text-neutral-400">
+<span class="material-icons text-primary">location_on</span>
+<span class="text-sm">Calle de la Elegancia 123, Madrid</span>
+</div>
+</div>
+
+<!-- SECCIÓN MODIFICADA: Enlaces Rápidos ahora en HORIZONTAL -->
+<div>
+<h4 class="text-lg font-bold text-neutral-900 dark:text-white mb-6 uppercase tracking-widest border-b border-gold-dark/30 pb-2 inline-block">Enlaces Rápidos</h4>
+<ul class="flex flex-wrap items-center gap-x-8 gap-y-2 text-neutral-500 dark:text-neutral-400">
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#"><span class="w-1 h-1 bg-gold-dark rounded-full"></span> Inicio</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#servicios"><span class="w-1 h-1 bg-gold-dark rounded-full"></span> Servicios</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#trabajos"><span class="w-1 h-1 bg-gold-dark rounded-full"></span> Galería</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#equipo"><span class="w-1 h-1 bg-gold-dark rounded-full"></span> Equipo</a></li>
+<li><a class="hover:text-primary transition-colors flex items-center gap-2" href="#contacto"><span class="w-1 h-1 bg-gold-dark rounded-full"></span> Contacto</a></li>
+</ul>
+</div>
+
+<!-- SECCIÓN MODIFICADA: Síguenos con enlaces a salones famosos -->
+<div>
+<h4 class="text-lg font-bold text-neutral-900 dark:text-white mb-8 uppercase tracking-widest border-b border-gold-dark/30 pb-2 inline-block">Síguenos</h4>
+<div class="flex gap-4">
+    
+    <!-- Instagram - @davines (salón profesional de cuidado capilar) -->
+    <a class="w-12 h-12 rounded-full border border-gold-dark/30 flex items-center justify-center text-gold-dark hover:bg-gold-dark hover:text-white transition-all" 
+       href="https://www.instagram.com/davines/" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       aria-label="Síguenos en Instagram">
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+        </svg>
+    </a>
+    
+    <!-- Facebook - Aveda (marca de belleza profesional) -->
+    <a class="w-12 h-12 rounded-full border border-gold-dark/30 flex items-center justify-center text-gold-dark hover:bg-gold-dark hover:text-white transition-all" 
+       href="https://www.facebook.com/aveda/" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       aria-label="Síguenos en Facebook">
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
+        </svg>
+    </a>
+    
+    <!-- Pinterest - L'Oréal Professionnel -->
+    <a class="w-12 h-12 rounded-full border border-gold-dark/30 flex items-center justify-center text-gold-dark hover:bg-gold-dark hover:text-white transition-all" 
+       href="https://www.pinterest.com/lorealpro/" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       aria-label="Síguenos en Pinterest">
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.261 7.929-7.261 4.162 0 7.398 2.967 7.398 6.93 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"></path>
+        </svg>
+    </a>
+</div>
+</div>
+</div>
+
+<div class="max-w-7xl mx-auto border-t border-primary/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-neutral-400 font-medium tracking-[0.2em] uppercase">
+            © 2024 Glamour Studio. Luxury Beauty Salon &amp; Spa.
+        </p>
+<div class="flex gap-6 text-[10px] text-neutral-400 font-bold uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Privacidad</a>
+<a class="hover:text-primary transition-colors" href="#">Términos</a>
+<a class="hover:text-primary transition-colors" href="#">Cookies</a>
+</div>
+</div>
+</footer>
+
+<!-- Botón de WhatsApp -->
+<a class="fixed bottom-8 right-8 z-[100] w-16 h-16 gold-gradient rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group overflow-hidden" 
+   href="https://wa.me/5491159602127?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20servicios" 
+   target="_blank">
+    <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <svg class="w-8 h-8 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path>
+    </svg>
+</a>
+
+<!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
+<script src="script.js"></script>
+</body>

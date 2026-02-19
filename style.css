@@ -1,0 +1,19 @@
+/* Estilos adicionales si son necesarios */
+/* La mayoría de los estilos ya están en Tailwind CSS */
+
+/* Smooth scroll para la navegación */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ajustes para el mapa */
+iframe {
+    filter: grayscale(50%) contrast(1.1);
+}
+
+/* Mejoras para móviles */
+@media (max-width: 768px) {
+    .text-8xl {
+        font-size: 4rem;
+    }
+}
