@@ -472,88 +472,6 @@ if (worksWrapper && worksPrevBtn && worksNextBtn && workCards.length > 0) {
     console.log('❌ ERROR: No se encontraron todos los elementos del carrusel de trabajos');
 }
 
-// ===== TESTIMONIOS - CARRUSEL CON FADE AUTOMÁTICO =====
-console.log('💬 Iniciando carrusel de testimonios con fade');
-
-// Buscar elementos de testimonios
-const testimonialItems = document.querySelectorAll('.testimonial-item');
-const testimonialDots = document.querySelectorAll('.testimonial-dot');
-
-console.log('📊 VERIFICACIÓN DE TESTIMONIOS:');
-console.log('   - Testimonios:', testimonialItems.length);
-console.log('   - Dots:', testimonialDots.length);
-
-if (testimonialItems.length > 0 && testimonialDots.length > 0) {
-    console.log('✅ ELEMENTOS DE TESTIMONIOS ENCONTRADOS');
-    
-    let testimonialCurrentIndex = 0;
-    let testimonialInterval;
-    const testimonialDelay = 5000; // 5 segundos entre cambios
-    
-    // Función para mostrar un testimonio específico
-    function mostrarTestimonio(index) {
-        // Validar índice
-        if (index < 0) index = testimonialItems.length - 1;
-        if (index >= testimonialItems.length) index = 0;
-        
-        // Ocultar todos los testimonios
-        testimonialItems.forEach(item => {
-            item.classList.add('opacity-0');
-            item.classList.remove('opacity-100');
-        });
-        
-        // Mostrar el testimonio seleccionado
-        testimonialItems[index].classList.remove('opacity-0');
-        testimonialItems[index].classList.add('opacity-100');
-        
-        // Actualizar dots
-        testimonialDots.forEach((dot, i) => {
-            dot.classList.remove('active-dot', 'bg-gold-dark');
-            dot.classList.add('bg-gray-300', 'dark:bg-gray-600');
-            if (i === index) {
-                dot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
-                dot.classList.add('active-dot', 'bg-gold-dark');
-            }
-        });
-        
-        testimonialCurrentIndex = index;
-        console.log('💬 Mostrando testimonio:', index + 1);
-    }
-    
-    // Función para avanzar al siguiente testimonio
-    function siguienteTestimonio() {
-        const nextIndex = (testimonialCurrentIndex + 1) % testimonialItems.length;
-        mostrarTestimonio(nextIndex);
-    }
-    
-    // Iniciar intervalo automático
-    function iniciarTestimoniosAutoplay() {
-        if (testimonialInterval) clearInterval(testimonialInterval);
-        testimonialInterval = setInterval(siguienteTestimonio, testimonialDelay);
-    }
-    
-    // Eventos para los dots (navegación manual)
-    testimonialDots.forEach((dot, index) => {
-        dot.addEventListener('click', function() {
-            console.log('🔘 Click en dot:', index + 1);
-            mostrarTestimonio(index);
-            
-            // Reiniciar el intervalo después de interacción manual
-            clearInterval(testimonialInterval);
-            iniciarTestimoniosAutoplay();
-        });
-    });
-    
-    // Iniciar con el primer testimonio
-    mostrarTestimonio(0);
-    iniciarTestimoniosAutoplay();
-    
-    console.log('✅ Carrusel de testimonios inicializado correctamente');
-    
-} else {
-    console.log('❌ ERROR: No se encontraron los elementos de testimonios');
-}
-
 // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
 console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
 
@@ -568,80 +486,74 @@ if (workCards2.length > 0) {
     }
     
     // Variable para mantener la tarjeta activa actual
-    let currentlyActiveCard = null;
+    let activeCard = null;
     
     workCards2.forEach(card => {
         card.addEventListener('click', function(e) {
             e.stopPropagation();
             
-            // Solo aplicar toggle en móvil
+            // Solo aplicar en móvil
             if (isMobile()) {
                 const overlay = this.querySelector('.pink-hover-overlay');
                 
                 if (overlay) {
-                    // Si esta tarjeta es la que está activa actualmente
-                    if (currentlyActiveCard === this) {
-                        // Desactivarla - usar clases de Tailwind
+                    // Si la tarjeta clickeada es la misma que está activa
+                    if (activeCard === this) {
+                        // Desactivarla
                         console.log('🔴 Desactivando tarjeta');
-                        overlay.classList.remove('opacity-100');
-                        overlay.classList.add('opacity-0');
-                        currentlyActiveCard = null;
+                        overlay.style.opacity = '0';
+                        activeCard = null;
                     } else {
-                        // Si hay otra tarjeta activa, desactivarla primero
-                        if (currentlyActiveCard) {
-                            const oldOverlay = currentlyActiveCard.querySelector('.pink-hover-overlay');
+                        // Si hay otra tarjeta activa, desactivarla
+                        if (activeCard) {
+                            const oldOverlay = activeCard.querySelector('.pink-hover-overlay');
                             if (oldOverlay) {
-                                oldOverlay.classList.remove('opacity-100');
-                                oldOverlay.classList.add('opacity-0');
+                                oldOverlay.style.opacity = '0';
                             }
                         }
                         
-                        // Activar esta tarjeta - usar clases de Tailwind
+                        // Activar la nueva tarjeta
                         console.log('🟢 Activando tarjeta');
-                        overlay.classList.remove('opacity-0');
-                        overlay.classList.add('opacity-100');
-                        currentlyActiveCard = this;
+                        overlay.style.opacity = '1';
+                        activeCard = this;
                     }
                 }
             }
         });
     });
     
-    // También manejar el cambio de tamaño de ventana
-    window.addEventListener('resize', function() {
-        if (!isMobile()) {
-            // En desktop, asegurar que todas las tarjetas tengan opacity manejado por CSS
-            workCards2.forEach(card => {
-                const overlay = card.querySelector('.pink-hover-overlay');
-                if (overlay) {
-                    overlay.classList.remove('opacity-100');
-                    overlay.classList.add('opacity-0');
-                }
-            });
-            currentlyActiveCard = null;
-        } else {
-            // Al volver a móvil, asegurar que todas empiecen ocultas
-            workCards2.forEach(card => {
-                const overlay = card.querySelector('.pink-hover-overlay');
-                if (overlay) {
-                    overlay.classList.remove('opacity-100');
-                    overlay.classList.add('opacity-0');
-                }
-            });
-            currentlyActiveCard = null;
-        }
-    });
-    
-    // Inicializar: en móvil, asegurar que todas las tarjetas comiencen con overlay oculto
+    // Inicializar: asegurar que todas empiecen con opacity 0 en móvil
     if (isMobile()) {
         workCards2.forEach(card => {
             const overlay = card.querySelector('.pink-hover-overlay');
             if (overlay) {
-                overlay.classList.remove('opacity-100');
-                overlay.classList.add('opacity-0');
+                overlay.style.opacity = '0';
             }
         });
     }
+    
+    // Manejar cambio de tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (!isMobile()) {
+            // En desktop, resetear todo para que funcione el hover
+            workCards2.forEach(card => {
+                const overlay = card.querySelector('.pink-hover-overlay');
+                if (overlay) {
+                    overlay.style.opacity = '';
+                }
+            });
+            activeCard = null;
+        } else {
+            // En móvil, asegurar que todas empiecen ocultas
+            workCards2.forEach(card => {
+                const overlay = card.querySelector('.pink-hover-overlay');
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                }
+            });
+            activeCard = null;
+        }
+    });
     
     console.log('✅ Toggle para trabajos configurado correctamente');
     
