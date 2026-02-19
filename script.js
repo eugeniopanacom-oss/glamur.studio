@@ -554,8 +554,8 @@ if (testimonialItems.length > 0 && testimonialDots.length > 0) {
     console.log('❌ ERROR: No se encontraron los elementos de testimonios');
 }
 
-// ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
-console.log('🖱️ Iniciando toggle para tarjetas de trabajos en móvil');
+    // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
+console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
 
 const workCards2 = document.querySelectorAll('.work-card');
 
@@ -567,14 +567,8 @@ if (workCards2.length > 0) {
         return window.innerWidth <= 768;
     }
     
-    // Primero, asegurarnos de que todas las tarjetas comiencen con overlay oculto
-    workCards2.forEach(card => {
-        const overlay = card.querySelector('.pink-hover-overlay');
-        if (overlay) {
-            overlay.classList.remove('opacity-100');
-            overlay.classList.add('opacity-0');
-        }
-    });
+    // Variable para mantener la tarjeta activa actual
+    let currentlyActiveCard = null;
     
     workCards2.forEach(card => {
         card.addEventListener('click', function(e) {
@@ -585,51 +579,58 @@ if (workCards2.length > 0) {
                 const overlay = this.querySelector('.pink-hover-overlay');
                 
                 if (overlay) {
-                    // Verificar si esta tarjeta ya está activa
-                    const isActive = overlay.classList.contains('opacity-100');
-                    
-                    if (isActive) {
-                        // Si está activa, desactivarla
+                    // Si esta tarjeta es la que está activa actualmente
+                    if (currentlyActiveCard === this) {
+                        // Desactivarla
                         console.log('🔴 Desactivando tarjeta');
-                        overlay.classList.remove('opacity-100');
-                        overlay.classList.add('opacity-0');
+                        overlay.style.opacity = '0';
+                        currentlyActiveCard = null;
                     } else {
-                        // Si no está activa, desactivar todas las demás primero
-                        workCards2.forEach(otherCard => {
-                            const otherOverlay = otherCard.querySelector('.pink-hover-overlay');
-                            if (otherOverlay) {
-                                otherOverlay.classList.remove('opacity-100');
-                                otherOverlay.classList.add('opacity-0');
+                        // Si hay otra tarjeta activa, desactivarla primero
+                        if (currentlyActiveCard) {
+                            const oldOverlay = currentlyActiveCard.querySelector('.pink-hover-overlay');
+                            if (oldOverlay) {
+                                oldOverlay.style.opacity = '0';
                             }
-                        });
+                        }
                         
                         // Activar esta tarjeta
                         console.log('🟢 Activando tarjeta');
-                        overlay.classList.remove('opacity-0');
-                        overlay.classList.add('opacity-100');
+                        overlay.style.opacity = '1';
+                        currentlyActiveCard = this;
                     }
                 }
             }
         });
     });
     
-    // Manejar el cambio de tamaño de ventana
+    // También manejar el cambio de tamaño de ventana
     window.addEventListener('resize', function() {
         if (!isMobile()) {
-            // En desktop, resetear todas las tarjetas
+            // En desktop, asegurar que todas las tarjetas tengan opacity manejado por CSS
             workCards2.forEach(card => {
                 const overlay = card.querySelector('.pink-hover-overlay');
                 if (overlay) {
-                    overlay.classList.remove('opacity-100');
-                    overlay.classList.add('opacity-0');
+                    overlay.style.opacity = ''; // Resetear estilo inline
                 }
             });
+            currentlyActiveCard = null;
         }
     });
+    
+    // Inicializar: en móvil, asegurar que todas las tarjetas comiencen con overlay oculto
+    if (isMobile()) {
+        workCards2.forEach(card => {
+            const overlay = card.querySelector('.pink-hover-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+            }
+        });
+    }
     
     console.log('✅ Toggle para trabajos configurado correctamente');
     
 } else {
     console.log('❌ No se encontraron tarjetas de trabajo');
-}    
+}
 });
