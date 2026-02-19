@@ -472,7 +472,7 @@ if (worksWrapper && worksPrevBtn && worksNextBtn && workCards.length > 0) {
     console.log('❌ ERROR: No se encontraron todos los elementos del carrusel de trabajos');
 }
 
-// ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
+    // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
 console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
 
 const workCards2 = document.querySelectorAll('.work-card');
@@ -487,6 +487,16 @@ if (workCards2.length > 0) {
     
     // Variable para mantener la tarjeta activa actual
     let activeCard = null;
+    
+    // Primero, aseguramos que todas las tarjetas empiecen con overlay oculto en móvil
+    if (isMobile()) {
+        workCards2.forEach(card => {
+            const overlay = card.querySelector('.pink-hover-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+            }
+        });
+    }
     
     workCards2.forEach(card => {
         card.addEventListener('click', function(e) {
@@ -521,16 +531,6 @@ if (workCards2.length > 0) {
             }
         });
     });
-    
-    // Inicializar: asegurar que todas empiecen con opacity 0 en móvil
-    if (isMobile()) {
-        workCards2.forEach(card => {
-            const overlay = card.querySelector('.pink-hover-overlay');
-            if (overlay) {
-                overlay.style.opacity = '0';
-            }
-        });
-    }
     
     // Manejar cambio de tamaño de ventana
     window.addEventListener('resize', function() {
