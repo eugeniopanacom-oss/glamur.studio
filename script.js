@@ -554,7 +554,7 @@ if (testimonialItems.length > 0 && testimonialDots.length > 0) {
     console.log('❌ ERROR: No se encontraron los elementos de testimonios');
 }
 
-    // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
+// ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
 console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
 
 const workCards2 = document.querySelectorAll('.work-card');
@@ -581,22 +581,25 @@ if (workCards2.length > 0) {
                 if (overlay) {
                     // Si esta tarjeta es la que está activa actualmente
                     if (currentlyActiveCard === this) {
-                        // Desactivarla
+                        // Desactivarla - usar clases de Tailwind
                         console.log('🔴 Desactivando tarjeta');
-                        overlay.style.opacity = '0';
+                        overlay.classList.remove('opacity-100');
+                        overlay.classList.add('opacity-0');
                         currentlyActiveCard = null;
                     } else {
                         // Si hay otra tarjeta activa, desactivarla primero
                         if (currentlyActiveCard) {
                             const oldOverlay = currentlyActiveCard.querySelector('.pink-hover-overlay');
                             if (oldOverlay) {
-                                oldOverlay.style.opacity = '0';
+                                oldOverlay.classList.remove('opacity-100');
+                                oldOverlay.classList.add('opacity-0');
                             }
                         }
                         
-                        // Activar esta tarjeta
+                        // Activar esta tarjeta - usar clases de Tailwind
                         console.log('🟢 Activando tarjeta');
-                        overlay.style.opacity = '1';
+                        overlay.classList.remove('opacity-0');
+                        overlay.classList.add('opacity-100');
                         currentlyActiveCard = this;
                     }
                 }
@@ -611,7 +614,18 @@ if (workCards2.length > 0) {
             workCards2.forEach(card => {
                 const overlay = card.querySelector('.pink-hover-overlay');
                 if (overlay) {
-                    overlay.style.opacity = ''; // Resetear estilo inline
+                    overlay.classList.remove('opacity-100');
+                    overlay.classList.add('opacity-0');
+                }
+            });
+            currentlyActiveCard = null;
+        } else {
+            // Al volver a móvil, asegurar que todas empiecen ocultas
+            workCards2.forEach(card => {
+                const overlay = card.querySelector('.pink-hover-overlay');
+                if (overlay) {
+                    overlay.classList.remove('opacity-100');
+                    overlay.classList.add('opacity-0');
                 }
             });
             currentlyActiveCard = null;
@@ -623,7 +637,8 @@ if (workCards2.length > 0) {
         workCards2.forEach(card => {
             const overlay = card.querySelector('.pink-hover-overlay');
             if (overlay) {
-                overlay.style.opacity = '0';
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0');
             }
         });
     }
