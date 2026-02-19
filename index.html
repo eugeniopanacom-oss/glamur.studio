@@ -410,6 +410,16 @@
     display: flex;
 }
 
+          /* ===== DESACTIVAR HOVER EN MÓVIL PARA TARJETAS DE TRABAJO ===== */
+@media (max-width: 768px) {
+    .work-card:hover .pink-hover-overlay {
+        opacity: 0 !important; /* Desactivar el hover en móvil */
+    }
+    
+    .work-card .pink-hover-overlay {
+        transition: opacity 0.3s ease;
+    }
+}
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
@@ -1028,3 +1038,4 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
+
