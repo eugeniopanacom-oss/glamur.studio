@@ -316,6 +316,47 @@
         display: none !important;
     }
 }
+
+          /* ===== CORRECCIÓN PARA CENTRAR TARJETAS EN MÓVIL ===== */
+@media (max-width: 639px) {
+    .services-carousel-wrapper {
+        gap: 1rem;
+        padding-left: calc(50% - 150px); /* Ajusta según el ancho de tu tarjeta */
+        padding-right: calc(50% - 150px);
+        scroll-snap-type: x mandatory;
+    }
+    
+    .service-card {
+        max-width: 300px; /* Un poco más pequeño en móvil para mejor ajuste */
+        scroll-snap-align: center; /* Cambia de 'start' a 'center' */
+    }
+    
+    /* Para que la primera tarjeta también se vea centrada */
+    .services-carousel-wrapper::before,
+    .services-carousel-wrapper::after {
+        content: '';
+        flex: 0 0 calc(50% - 150px);
+    }
+}
+
+/* Ajuste para tablets muy pequeñas */
+@media (min-width: 640px) and (max-width: 768px) {
+    .services-carousel-wrapper {
+        gap: 1.5rem;
+        padding-left: calc(50% - 200px);
+        padding-right: calc(50% - 200px);
+    }
+    
+    .service-card {
+        scroll-snap-align: center;
+    }
+    
+    .services-carousel-wrapper::before,
+    .services-carousel-wrapper::after {
+        content: '';
+        flex: 0 0 calc(50% - 200px);
+    }
+}
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
