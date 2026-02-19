@@ -472,7 +472,7 @@ if (worksWrapper && worksPrevBtn && worksNextBtn && workCards.length > 0) {
     console.log('❌ ERROR: No se encontraron todos los elementos del carrusel de trabajos');
 }
 
-    // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
+  // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
 console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
 
 const workCards2 = document.querySelectorAll('.work-card');
@@ -541,3 +541,4 @@ if (workCards2.length > 0) {
     console.log('✅ Toggle configurado');
 }
 });
+
