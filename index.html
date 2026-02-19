@@ -421,28 +421,31 @@
     }
 }
 
-          /* ===== MEJORAR VISIBILIDAD DEL OVERLAY ROSA EN MÓVIL ===== */
+   /* ===== DESACTIVAR HOVER EN MÓVIL PARA TARJETAS DE TRABAJO ===== */
+@media (max-width: 768px) {
+    .work-card:hover .pink-hover-overlay {
+        opacity: 0 !important; /* Desactivar el hover en móvil */
+    }
+}
+
+/* ===== MEJORAR VISIBILIDAD DEL OVERLAY ROSA EN MÓVIL ===== */
 @media (max-width: 768px) {
     .work-card .pink-hover-overlay {
-        background: rgba(238, 43, 124, 0.95); /* Un poco más opaco para mejor visibilidad */
+        background: rgba(238, 43, 124, 0.95);
         display: flex !important;
         align-items: center;
         justify-content: center;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        /* QUITAMOS el opacity: 0 !important de aquí */
     }
     
     .work-card .pink-hover-overlay h3,
     .work-card .pink-hover-overlay p {
         color: white !important;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Sombra para mejor legibilidad */
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    
-    /* Asegurar que el overlay siempre esté presente pero oculto inicialmente */
-    .work-card .pink-hover-overlay {
-        opacity: 0 !important;
-        transition: opacity 0.3s ease;
-        pointer-events: none; /* Para que no interfiera con clicks */
-    }
-}
+} 
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
@@ -1061,5 +1064,6 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
+
 
 
