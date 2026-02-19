@@ -409,6 +409,27 @@
     overflow-x: auto;
     display: flex;
 }
+
+          /* ===== DESACTIVAR HOVER EN MÓVIL PARA LAS TARJETAS DE TRABAJO ===== */
+@media (max-width: 768px) {
+    .work-card .pink-hover-overlay {
+        opacity: 0 !important; /* Forzar opacidad 0 por defecto */
+        transition: opacity 0.3s ease;
+    }
+    
+    .work-card .pink-hover-overlay.opacity-100 {
+        opacity: 1 !important; /* Cuando JavaScript la active */
+    }
+    
+    /* Desactivar completamente el hover en móvil */
+    .work-card:hover .pink-hover-overlay {
+        opacity: 0 !important;
+    }
+    
+    .work-card.group:hover .pink-hover-overlay {
+        opacity: 0 !important;
+    }
+}
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
@@ -1027,4 +1048,5 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
+
 
