@@ -337,17 +337,25 @@ document.querySelectorAll('.grid-cols-2 button').forEach(btn => {
     }
 });
 
-// Función para verificar si los campos requeridos están completos
+// Función para verificar si los campos requeridos están completos y válidos
 function verificarCamposRequeridos() {
     const nombreInput = document.querySelector('input[placeholder*="Isabella"]');
     const emailInput = document.querySelector('input[type="email"]');
     const telefonoInput = document.querySelector('input[type="tel"]');
     
     const nombreCompleto = nombreInput && nombreInput.value.trim() !== '';
-    const emailCompleto = emailInput && emailInput.value.trim() !== '';
-    const telefonoCompleto = telefonoInput && telefonoInput.value.trim() !== '';
     
-    return nombreCompleto && emailCompleto && telefonoCompleto;
+    // Validar email con expresión regular básica
+    const emailValue = emailInput ? emailInput.value.trim() : '';
+    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+    
+    // Validar teléfono: al menos 9 dígitos (quitando espacios, +, etc)
+    const telefonoValue = telefonoInput ? telefonoInput.value.trim() : '';
+    // Eliminar todo lo que no sea dígito
+    const soloDigitos = telefonoValue.replace(/\D/g, '');
+    const telefonoValido = soloDigitos.length >= 9;
+    
+    return nombreCompleto && emailValido && telefonoValido;
 }
 
 // Manejar cambios en los inputs del formulario
@@ -361,6 +369,9 @@ document.querySelectorAll('input, textarea').forEach(input => {
         
         if (!esCampoNotas) {
             const completos = verificarCamposRequeridos();
+            
+            // Debug opcional (puedes borrarlo después)
+            console.log('Campos completos?', completos, 'Flag:', datosCompletosFlag);
             
             // Si se acaban de completar los datos y no se ha hecho scroll aún
             if (completos && !datosCompletosFlag) {
@@ -451,7 +462,3 @@ document.addEventListener('DOMContentLoaded', function() {
     
     actualizarStepper();
 });
-
-
-
-
