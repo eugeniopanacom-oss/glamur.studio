@@ -1,3 +1,6 @@
+// Variables para control de scroll
+let scrollYaRealizado = false;
+let datosCompletosFlag = false;
 // Variables globales para el calendario
 let fechaActual = new Date();
 let mesActual = fechaActual.getMonth();
@@ -162,7 +165,15 @@ function scrollASeccion(selector) {
         const stepperHeight = 80; // Altura aproximada del stepper sticky
         const offset = headerHeight + stepperHeight + 20; // 20px de margen extra
         
-        const elementPosition = elemento.getBoundingClientRect().top + window.pageYOffset;
+        // Intentar encontrar el título del resumen para un scroll más preciso
+        const tituloResumen = elemento.querySelector('h2');
+        let elementoParaScroll = elemento;
+        
+        if (tituloResumen) {
+            elementoParaScroll = tituloResumen;
+        }
+        
+        const elementPosition = elementoParaScroll.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - offset;
         
         window.scrollTo({
@@ -170,7 +181,7 @@ function scrollASeccion(selector) {
             behavior: 'smooth'
         });
     }
-} 
+}
 
 // Función para actualizar el stepper
 function actualizarStepper() {
@@ -326,10 +337,47 @@ document.querySelectorAll('.grid-cols-2 button').forEach(btn => {
     }
 });
 
+// Función para verificar si los campos requeridos están completos
+function verificarCamposRequeridos() {
+    const nombreInput = document.querySelector('input[placeholder*="Isabella"]');
+    const emailInput = document.querySelector('input[type="email"]');
+    const telefonoInput = document.querySelector('input[type="tel"]');
+    
+    const nombreCompleto = nombreInput && nombreInput.value.trim() !== '';
+    const emailCompleto = emailInput && emailInput.value.trim() !== '';
+    const telefonoCompleto = telefonoInput && telefonoInput.value.trim() !== '';
+    
+    return nombreCompleto && emailCompleto && telefonoCompleto;
+}
+
 // Manejar cambios en los inputs del formulario
 document.querySelectorAll('input, textarea').forEach(input => {
     input.addEventListener('input', function() {
+        // Actualizar stepper siempre
         actualizarStepper();
+        
+        // Solo procesar scroll si NO es el campo de notas
+        const esCampoNotas = this.closest('textarea') !== null;
+        
+        if (!esCampoNotas) {
+            const completos = verificarCamposRequeridos();
+            
+            // Si se acaban de completar los datos y no se ha hecho scroll aún
+            if (completos && !datosCompletosFlag) {
+                datosCompletosFlag = true;
+                
+                // Pequeño retraso para asegurar que el DOM se actualizó
+                setTimeout(() => {
+                    scrollASeccion('aside.lg\\:col-span-4'); // Scroll al resumen
+                }, 100);
+            }
+            
+            // Si ya no están completos, resetear flag
+            if (!completos) {
+                datosCompletosFlag = false;
+                scrollYaRealizado = false;
+            }
+        }
     });
     
     input.addEventListener('change', function() {
@@ -403,6 +451,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     actualizarStepper();
 });
+
 
 
 
