@@ -409,6 +409,51 @@
     overflow-x: auto;
     display: flex;
 }
+          /* ===== ESTILOS PARA OVERLAY DE TRABAJOS EN MÓVIL ===== */
+@media (max-width: 768px) {
+    .work-card {
+        position: relative;
+        cursor: pointer;
+    }
+    
+    .work-card .work-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        text-align: center;
+        background: rgba(238, 43, 124, 0.95);
+        color: white;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .work-card .work-overlay h3 {
+        color: white !important;
+        font-size: 1.875rem;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.025em;
+    }
+    
+    .work-card .work-overlay p {
+        color: #f3e1ad !important;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
+}
+
+/* En desktop, overlay solo en hover */
+@media (min-width: 769px) {
+    .work-card:hover .work-overlay {
+        opacity: 1 !important;
+    }
 }
 </style>
 </head>
@@ -635,13 +680,13 @@
 <div class="works-carousel-container relative">
     <!-- Wrapper con scroll-snap -->
     <div class="works-carousel-wrapper">
-        <!-- Trabajo 1 - Corte Moderno (MODIFICADO) -->
+    <!-- Trabajo 1 - Corte Moderno (VERSIÓN CORREGIDA) -->
 <div class="work-card group relative aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-neutral-200 cursor-pointer shadow-lg">
     <img alt="Corte Moderno" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDybG6B0Olommrohgs0ZjqHIVKEtAB2I1WOGrYolgYMHmsdICewWUsgOu0OqwWgIy5_7Ftqu-OpA1dYkGJf8ZbY4vVg7sxtsn2qQBBiYW2xA9B5bqqZvhpmGU7dlkbNnsOuBATMw_n0bRqsviBvRQQSQmGpAFJJ0G5c2L86KFXowzAqkme-6mE_mBAxq6j7g-8gOJ9J048rGiggQGmO2TiRInciaFR8xm2Cy6KSruSwj1tZ44-0oy96c5xeDGg-RCYynXnzdmRWT0_5"/>
-    <!-- Overlay con estilo inline para control total -->
-    <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center transition-all duration-300" style="background: rgba(238, 43, 124, 0.95); opacity: 0;">
-        <h3 class="text-white text-3xl font-serif mb-2 tracking-wide">Corte Moderno</h3>
-        <p class="text-gold-light font-medium tracking-widest uppercase text-xs">Estilo Vanguardista</p>
+    <!-- Overlay con clase específica en lugar de estilo inline -->
+    <div class="work-overlay" style="opacity: 0;">
+        <h3>Corte Moderno</h3>
+        <p>Estilo Vanguardista</p>
     </div>
 </div>
 
@@ -1027,10 +1072,3 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
-
-
-
-
-
-
-
