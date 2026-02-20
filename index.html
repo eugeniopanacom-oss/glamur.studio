@@ -409,56 +409,52 @@
     overflow-x: auto;
     display: flex;
 }
-         /* ===== ESTILOS PARA OVERLAY DE TRABAJOS ===== */
-@media (max-width: 768px) {
-    .work-card {
-        position: relative;
-        cursor: pointer;
-    }
-    
-    .work-card .work-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 1.5rem;
-        text-align: center;
-        background: rgba(238, 43, 124, 0.95);
-        color: white;
-        transition: opacity 0.3s ease;
-        z-index: 10;
-        pointer-events: none;
-    }
-    
-    .work-card .work-overlay h3 {
-        color: white !important;
-        font-size: 1.875rem;
-        font-family: 'Playfair Display', serif;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.025em;
-    }
-    
-    .work-card .work-overlay p {
-        color: #f3e1ad !important;
-        font-weight: 500;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        font-size: 0.75rem;
+     /* ===== ESTILOS PARA OVERLAY DE TRABAJOS ===== */
+/* Estilos base (aplican en todos los tamaños) */
+.work-card .work-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(238, 43, 124, 0.95); /* Fondo rosa para TODOS */
+    color: white;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0; /* Oculto por defecto */
+}
+
+.work-card .work-overlay h3 {
+    color: white !important;
+    font-size: 1.875rem;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.025em;
+}
+
+.work-card .work-overlay p {
+    color: #f3e1ad !important;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+/* Versión desktop - hover */
+@media (min-width: 769px) {
+    .work-card:hover .work-overlay {
+        opacity: 1 !important;
     }
 }
 
-/* ESTA ES LA PARTE CORREGIDA - AHORA ESTÁ FUERA DEL @media ANTERIOR */
-/* En desktop, overlay solo en hover */
-@media (min-width: 769px) {
-    .work-card .work-overlay {
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .work-card:hover .work-overlay {
-        opacity: 1 !important;
+/* Versión móvil - click (el JS controla la opacidad) */
+@media (max-width: 768px) {
+    .work-card {
+        cursor: pointer;
     }
 }
 </style>
@@ -1078,4 +1074,3 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
-
