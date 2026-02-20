@@ -349,10 +349,13 @@ function verificarCamposRequeridos() {
     const emailValue = emailInput ? emailInput.value.trim() : '';
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
     
-    // Validar teléfono: EXACTAMENTE 9 dígitos (para España)
+    // Validar teléfono: PARA ARGENTINA (10 dígitos)
     const telefonoValue = telefonoInput ? telefonoInput.value.trim() : '';
     const soloDigitos = telefonoValue.replace(/\D/g, '');
-    const telefonoValido = soloDigitos.length === 9; // CAMBIADO de >= a ===
+    
+    // En Argentina, los celulares tienen 10 dígitos (ej: 1148324284)
+    // También aceptamos 9 por si alguien pone código de área sin el 9
+    const telefonoValido = soloDigitos.length === 10 || soloDigitos.length === 9;
     
     // LOGS PARA DEBUG - los verás en consola F12
     console.log('=== VALIDACIÓN ===');
