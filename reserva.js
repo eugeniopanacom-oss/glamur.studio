@@ -299,33 +299,6 @@ document.querySelectorAll('.grid-cols-2 button').forEach(btn => {
     }
 });
 
-// Manejar selección de fecha
-document.querySelectorAll('.grid-cols-7 div[class*="cursor-pointer"]').forEach(dia => {
-    dia.addEventListener('click', function() {
-        document.querySelectorAll('.grid-cols-7 div[class*="cursor-pointer"]').forEach(d => {
-            d.classList.remove('bg-primary', 'text-white', 'shadow-md');
-        });
-        
-        this.classList.add('bg-primary', 'text-white', 'shadow-md');
-        
-        // Actualizar fecha en resumen
-        const fecha = this.textContent.padStart(2, '0');
-        document.querySelector('.resumen-fecha').textContent = `Viernes, ${fecha} Octubre 2023`;
-        
-        // Actualizar stepper
-        actualizarStepper();
-        
-        // Verificar si YA TENEMOS AMBOS (fecha Y hora) seleccionados
-        const horaSeleccionada = document.querySelector('.grid-cols-2 button.bg-primary') !== null;
-        const fechaSeleccionada = true; // Acabamos de seleccionar fecha
-        
-        // Solo hacer scroll si AMBOS están seleccionados
-        if (fechaSeleccionada && horaSeleccionada) {
-            scrollASeccion('.pt-8.border-t.border-stone-200:nth-of-type(3)'); // Sección de Tus Datos
-        }
-    });
-});
-
 // Manejar cambios en los inputs del formulario
 document.querySelectorAll('input, textarea').forEach(input => {
     input.addEventListener('input', function() {
@@ -403,3 +376,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     actualizarStepper();
 });
+
