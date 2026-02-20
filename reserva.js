@@ -257,6 +257,13 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
 // Inicializar datos en resumen y stepper
 document.addEventListener('DOMContentLoaded', function() {
+    // Establecer valores por defecto en el resumen (placeholders)
+    document.querySelector('.resumen-servicio h4').textContent = 'Ningún servicio seleccionado';
+    document.querySelector('.resumen-servicio .precio').textContent = 'Selecciona un servicio';
+    document.querySelector('.resumen-fecha').textContent = 'Sin fecha seleccionada';
+    document.querySelector('.resumen-hora').textContent = 'Sin hora seleccionada';
+    document.querySelector('.flex.justify-between.items-center.mb-8 .text-2xl').textContent = '$0.00';
+    
     // Actualizar stepper al cargar la página (sin seleccionar nada)
     actualizarStepper();
 });
