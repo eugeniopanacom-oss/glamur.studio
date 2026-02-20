@@ -257,17 +257,6 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
 // Inicializar datos en resumen y stepper
 document.addEventListener('DOMContentLoaded', function() {
-    // Por defecto, seleccionar el primer servicio
-    setTimeout(() => {
-        const primerServicio = document.querySelector('.group');
-        if (primerServicio) {
-            primerServicio.click();
-        }
-        
-        // Actualizar stepper al cargar la página
-        actualizarStepper();
-    }, 100);
+    // Actualizar stepper al cargar la página (sin seleccionar nada)
+    actualizarStepper();
 });
-
-
-
