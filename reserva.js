@@ -59,9 +59,25 @@ function renderizarCalendario() {
         calendarioGrid.appendChild(diaDiv);
     });
     
-    // Días del mes actual (seleccionables)
-    diasMesActual.forEach(dia => {
-        const diaDiv = document.createElement('div');
+    // Días del mes actual
+diasMesActual.forEach(dia => {
+    const diaDiv = document.createElement('div');
+    
+    // Crear fecha para comparar
+    const fechaComparar = new Date(añoActual, mesActual, dia);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Resetear hora para comparar solo fechas
+    
+    // Verificar si es una fecha pasada
+    const esFechaPasada = fechaComparar < hoy;
+    
+    if (esFechaPasada) {
+        // Fecha pasada: gris y no seleccionable
+        diaDiv.className = 'h-10 flex items-center justify-center text-stone-300 cursor-not-allowed';
+        diaDiv.textContent = dia;
+        // No añadir event listener
+    } else {
+        // Fecha futura o actual: seleccionable
         diaDiv.className = 'h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded';
         diaDiv.textContent = dia;
         
@@ -73,9 +89,10 @@ function renderizarCalendario() {
         diaDiv.addEventListener('click', function() {
             seleccionarFecha(dia, mesActual, añoActual);
         });
-        
-        calendarioGrid.appendChild(diaDiv);
-    });
+    }
+    
+    calendarioGrid.appendChild(diaDiv);
+});
     
     // Actualizar título del mes
     const mesTitulo = document.querySelector('.flex.justify-between.items-center.mb-4 .font-bold');
@@ -86,6 +103,16 @@ function renderizarCalendario() {
 
 // Función para seleccionar fecha
 function seleccionarFecha(dia, mes, año) {
+    // Crear fecha para validar
+    const fechaSeleccionada = new Date(año, mes, dia);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    // No permitir seleccionar fechas pasadas
+    if (fechaSeleccionada < hoy) {
+        return; // No hacer nada
+    }
+    
     diaSeleccionado = dia;
     mesSeleccionado = mes;
     añoSeleccionado = año;
@@ -376,4 +403,5 @@ document.addEventListener('DOMContentLoaded', function() {
     
     actualizarStepper();
 });
+
 
