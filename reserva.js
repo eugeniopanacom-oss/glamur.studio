@@ -349,13 +349,13 @@ function verificarCamposRequeridos() {
     const emailValue = emailInput ? emailInput.value.trim() : '';
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
     
-    // Validar teléfono: PARA ARGENTINA (10 dígitos)
+    // Validar teléfono: PARA ARGENTINA (EXACTAMENTE 10 dígitos)
     const telefonoValue = telefonoInput ? telefonoInput.value.trim() : '';
     const soloDigitos = telefonoValue.replace(/\D/g, '');
     
     // En Argentina, los celulares tienen 10 dígitos (ej: 1148324284)
-    // También aceptamos 9 por si alguien pone código de área sin el 9
-    const telefonoValido = soloDigitos.length === 10 || soloDigitos.length === 9;
+    // SOLO aceptamos cuando tiene EXACTAMENTE 10 dígitos
+    const telefonoValido = soloDigitos.length === 10;
     
     // LOGS PARA DEBUG - los verás en consola F12
     console.log('=== VALIDACIÓN ===');
@@ -392,8 +392,7 @@ document.querySelectorAll('input, textarea').forEach(input => {
             }
             
             // Si ya no están completos, resetear flag
-            if (!completos && datosCompletosFlag) {
-                console.log('Campos incompletos, reseteando flag');
+            if (!completos) {
                 datosCompletosFlag = false;
                 scrollYaRealizado = false;
             }
