@@ -409,7 +409,7 @@
     overflow-x: auto;
     display: flex;
 }
-          /* ===== ESTILOS PARA OVERLAY DE TRABAJOS EN MÓVIL ===== */
+         /* ===== ESTILOS PARA OVERLAY DE TRABAJOS ===== */
 @media (max-width: 768px) {
     .work-card {
         position: relative;
@@ -449,8 +449,14 @@
     }
 }
 
+/* ESTA ES LA PARTE CORREGIDA - AHORA ESTÁ FUERA DEL @media ANTERIOR */
 /* En desktop, overlay solo en hover */
 @media (min-width: 769px) {
+    .work-card .work-overlay {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
     .work-card:hover .work-overlay {
         opacity: 1 !important;
     }
@@ -1072,3 +1078,4 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
+
