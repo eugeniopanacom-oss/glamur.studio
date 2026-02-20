@@ -158,6 +158,15 @@ document.querySelectorAll('.grid-cols-2 button').forEach(btn => {
             
             // Actualizar stepper
             actualizarStepper();
+            
+            // Verificar si ya hay fecha seleccionada
+            const fechaSeleccionada = document.querySelector('.grid-cols-7 div.bg-primary') !== null;
+            const horaSeleccionada = true;
+            
+            // Si ya tenemos fecha seleccionada, hacer scroll a Tus Datos
+            if (fechaSeleccionada && horaSeleccionada) {
+                scrollASeccion('.pt-8.border-t.border-stone-200:nth-of-type(3)'); // Selector de la sección de Tus Datos
+            }
         });
     }
 });
@@ -177,9 +186,17 @@ document.querySelectorAll('.grid-cols-7 div[class*="cursor-pointer"]').forEach(d
         
         // Actualizar stepper
         actualizarStepper();
+        
+        // Verificar si ya hay hora seleccionada
+        const horaSeleccionada = document.querySelector('.grid-cols-2 button.bg-primary') !== null;
+        const fechaSeleccionada = true;
+        
+        // Si ya tenemos hora seleccionada, hacer scroll a Tus Datos
+        if (fechaSeleccionada && horaSeleccionada) {
+            scrollASeccion('.pt-8.border-t.border-stone-200:nth-of-type(3)'); // Selector de la sección de Tus Datos
+        }
     });
 });
-
 // Manejar cambios en los inputs del formulario
 document.querySelectorAll('input, textarea').forEach(input => {
     input.addEventListener('input', function() {
@@ -250,4 +267,5 @@ document.addEventListener('DOMContentLoaded', function() {
         actualizarStepper();
     }, 100);
 });
+
 
