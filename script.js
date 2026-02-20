@@ -472,73 +472,110 @@ if (worksWrapper && worksPrevBtn && worksNextBtn && workCards.length > 0) {
     console.log('❌ ERROR: No se encontraron todos los elementos del carrusel de trabajos');
 }
 
-  // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL =====
-console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
+// ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL - VERSIÓN CORREGIDA =====
+console.log('🖱️ Iniciando toggle para tarjetas de trabajos (versión corregida)');
 
-const workCards2 = document.querySelectorAll('.work-card');
-
-if (workCards2.length > 0) {
-    console.log(`✅ ${workCards2.length} tarjetas de trabajo encontradas`);
+function initWorkCardsToggle() {
+    const workCards = document.querySelectorAll('.work-card');
     
+    if (workCards.length === 0) {
+        console.log('❌ No se encontraron tarjetas de trabajo');
+        return;
+    }
+    
+    console.log(`✅ ${workCards.length} tarjetas de trabajo encontradas`);
+    
+    // Función para detectar si es móvil
     function isMobile() {
         return window.innerWidth <= 768;
     }
     
+    // Variable para trackear la tarjeta activa
     let activeCard = null;
     
-    workCards2.forEach(card => {
+    // Función para resetear todas las tarjetas
+    function resetAllCards() {
+        workCards.forEach(card => {
+            const overlay = card.querySelector('div[style*="background: rgba(238, 43, 124, 0.95)"]');
+            if (overlay) {
+                overlay.style.opacity = '0';
+            }
+        });
+        activeCard = null;
+    }
+    
+    // Función para activar una tarjeta específica
+    function activateCard(card) {
+        const overlay = card.querySelector('div[style*="background: rgba(238, 43, 124, 0.95)"]');
+        if (overlay) {
+            overlay.style.opacity = '1';
+            activeCard = card;
+        }
+    }
+    
+    // Función para desactivar una tarjeta específica
+    function deactivateCard(card) {
+        const overlay = card.querySelector('div[style*="background: rgba(238, 43, 124, 0.95)"]');
+        if (overlay) {
+            overlay.style.opacity = '0';
+        }
+    }
+    
+    // Agregar event listeners a cada tarjeta
+    workCards.forEach(card => {
         card.addEventListener('click', function(e) {
             e.stopPropagation();
             
-            if (isMobile()) {
-                const overlay = this.querySelector('.pink-hover-overlay');
+            // Solo funcionar en móvil
+            if (!isMobile()) return;
+            
+            console.log('👆 Tarjeta clickeada');
+            
+            if (activeCard === this) {
+                // Misma tarjeta → desactivar
+                console.log('🔴 Desactivando tarjeta');
+                deactivateCard(this);
+                activeCard = null;
+            } else {
+                // Diferente tarjeta
+                console.log('🟢 Activando nueva tarjeta');
                 
-                if (overlay) {
-                    if (activeCard === this) {
-                        // Misma tarjeta → desactivar
-                        console.log('🔴 Desactivando');
-                        overlay.style.opacity = '0';
-                        activeCard = null;
-                    } else {
-                        // Diferente tarjeta → desactivar anterior y activar nueva
-                        if (activeCard) {
-                            const oldOverlay = activeCard.querySelector('.pink-hover-overlay');
-                            if (oldOverlay) oldOverlay.style.opacity = '0';
-                        }
-                        console.log('🟢 Activando');
-                        overlay.style.opacity = '1';
-                        activeCard = this;
-                    }
+                // Desactivar la anterior si existe
+                if (activeCard) {
+                    deactivateCard(activeCard);
                 }
+                
+                // Activar la nueva
+                activateCard(this);
             }
         });
     });
     
+    // Evento para cambios de tamaño de ventana
     window.addEventListener('resize', function() {
         if (!isMobile()) {
-            workCards2.forEach(card => {
-                const overlay = card.querySelector('.pink-hover-overlay');
-                if (overlay) overlay.style.opacity = '';
-            });
-            activeCard = null;
+            // En desktop: resetear todo
+            resetAllCards();
         } else {
-            workCards2.forEach(card => {
-                const overlay = card.querySelector('.pink-hover-overlay');
-                if (overlay) overlay.style.opacity = '0';
-            });
-            activeCard = null;
+            // En móvil: asegurar que todas empiezan apagadas
+            resetAllCards();
         }
     });
     
-    // Inicializar
+    // Inicializar: en móvil empezar todas apagadas
     if (isMobile()) {
-        workCards2.forEach(card => {
-            const overlay = card.querySelector('.pink-hover-overlay');
-            if (overlay) overlay.style.opacity = '0';
-        });
+        resetAllCards();
     }
     
-    console.log('✅ Toggle configurado');
+    console.log('✅ Toggle para trabajos configurado correctamente');
 }
-});
 
+// Llamar a la función después de que el DOM esté listo
+// Asegurarse de que se ejecute después de que todo esté cargado
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWorkCardsToggle);
+} else {
+    // DOM ya está cargado
+    initWorkCardsToggle();
+} 
+});
