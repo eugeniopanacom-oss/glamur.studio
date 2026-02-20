@@ -1,4 +1,65 @@
-// reserva.js
+// Función para actualizar el stepper
+function actualizarStepper() {
+    // Obtener los elementos del stepper
+    const paso1 = document.querySelector('.flex.flex-col.items-center:first-child .w-10.h-10');
+    const paso2 = document.querySelector('.flex.flex-col.items-center:nth-child(2) .w-10.h-10');
+    const paso3 = document.querySelector('.flex.flex-col.items-center:nth-child(3) .w-10.h-10');
+    const paso4 = document.querySelector('.flex.flex-col.items-center:last-child .w-10.h-10');
+    
+    // Obtener los textos de cada paso
+    const textPaso1 = document.querySelector('.flex.flex-col.items-center:first-child span:last-child');
+    const textPaso2 = document.querySelector('.flex.flex-col.items-center:nth-child(2) span:last-child');
+    const textPaso3 = document.querySelector('.flex.flex-col.items-center:nth-child(3) span:last-child');
+    const textPaso4 = document.querySelector('.flex.flex-col.items-center:last-child span:last-child');
+    
+    // Verificar qué información está completa
+    const servicioSeleccionado = document.querySelector('.group.border-2.border-primary') !== null;
+    
+    const fechaSeleccionada = document.querySelector('.grid-cols-7 div.bg-primary') !== null;
+    const horaSeleccionada = document.querySelector('.grid-cols-2 button.bg-primary') !== null;
+    const fechaHoraCompleta = fechaSeleccionada && horaSeleccionada;
+    
+    // Verificar datos del formulario
+    const nombreInput = document.querySelector('input[placeholder*="Isabella"]');
+    const emailInput = document.querySelector('input[type="email"]');
+    const telefonoInput = document.querySelector('input[type="tel"]');
+    
+    const nombreCompleto = nombreInput && nombreInput.value.trim() !== '';
+    const emailCompleto = emailInput && emailInput.value.trim() !== '';
+    const telefonoCompleto = telefonoInput && telefonoInput.value.trim() !== '';
+    const datosCompletos = nombreCompleto && emailCompleto && telefonoCompleto;
+    
+    // Actualizar paso 1
+    if (servicioSeleccionado) {
+        paso1.className = 'w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20';
+        if (textPaso1) textPaso1.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-primary';
+    } else {
+        paso1.className = 'w-10 h-10 rounded-full bg-white dark:bg-stone-800 border-2 border-primary text-primary flex items-center justify-center font-bold';
+        if (textPaso1) textPaso1.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-stone-400';
+    }
+    
+    // Actualizar paso 2
+    if (fechaHoraCompleta) {
+        paso2.className = 'w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20';
+        if (textPaso2) textPaso2.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-primary';
+    } else {
+        paso2.className = 'w-10 h-10 rounded-full bg-white dark:bg-stone-800 border-2 border-primary text-primary flex items-center justify-center font-bold';
+        if (textPaso2) textPaso2.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-stone-400';
+    }
+    
+    // Actualizar paso 3
+    if (datosCompletos) {
+        paso3.className = 'w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20';
+        if (textPaso3) textPaso3.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-primary';
+    } else {
+        paso3.className = 'w-10 h-10 rounded-full bg-white dark:bg-stone-800 border-2 border-primary text-primary flex items-center justify-center font-bold';
+        if (textPaso3) textPaso3.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-stone-400';
+    }
+    
+    // Paso 4 siempre pendiente hasta que se envíe el formulario
+    paso4.className = 'w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center font-bold';
+    if (textPaso4) textPaso4.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-stone-400';
+}
 
 // Smooth scroll para enlaces internos (si los hay)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -43,8 +104,17 @@ document.querySelectorAll('.group').forEach(card => {
         // Actualizar resumen
         const servicio = this.querySelector('h3').textContent;
         const precio = this.querySelector('.font-bold:last-child').textContent;
+        const tiempo = this.querySelector('.text-stone-400.text-sm').textContent;
+        
         document.querySelector('.resumen-servicio h4').textContent = servicio;
-        document.querySelector('.resumen-servicio .precio').textContent = precio;
+        document.querySelector('.resumen-servicio .precio').textContent = tiempo;
+        
+        // Actualizar el total en el resumen
+        const precioNumerico = parseFloat(precio.replace('Desde $', ''));
+        document.querySelector('.flex.justify-between.items-center.mb-8 .text-2xl').textContent = `$${precioNumerico.toFixed(2)}`;
+        
+        // Actualizar stepper
+        actualizarStepper();
     });
 });
 
@@ -62,6 +132,9 @@ document.querySelectorAll('.grid-cols-2 button').forEach(btn => {
             
             // Actualizar hora en resumen
             document.querySelector('.resumen-hora').textContent = this.textContent;
+            
+            // Actualizar stepper
+            actualizarStepper();
         });
     }
 });
@@ -78,6 +151,20 @@ document.querySelectorAll('.grid-cols-7 div[class*="cursor-pointer"]').forEach(d
         // Actualizar fecha en resumen
         const fecha = this.textContent.padStart(2, '0');
         document.querySelector('.resumen-fecha').textContent = `Viernes, ${fecha} Octubre 2023`;
+        
+        // Actualizar stepper
+        actualizarStepper();
+    });
+});
+
+// Manejar cambios en los inputs del formulario
+document.querySelectorAll('input, textarea').forEach(input => {
+    input.addEventListener('input', function() {
+        actualizarStepper();
+    });
+    
+    input.addEventListener('change', function() {
+        actualizarStepper();
     });
 });
 
@@ -99,7 +186,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
     // Guardar en localStorage
     const reserva = {
         servicio: document.querySelector('.resumen-servicio h4').textContent,
-        precio: document.querySelector('.resumen-servicio .precio').textContent,
+        precio: document.querySelector('.flex.justify-between.items-center.mb-8 .text-2xl').textContent,
         fecha: document.querySelector('.resumen-fecha').textContent,
         hora: document.querySelector('.resumen-hora').textContent,
         nombre,
@@ -113,12 +200,21 @@ document.querySelector('form').addEventListener('submit', function(e) {
     reservas.push(reserva);
     localStorage.setItem('reservas', JSON.stringify(reservas));
     
-    // Redirigir a confirmación o mostrar mensaje
-    alert('¡Reserva confirmada! Te esperamos en Glamour Studio.');
-    window.location.href = 'index.html';
+    // Actualizar paso 4 a completado antes de redirigir
+    const paso4 = document.querySelector('.flex.flex-col.items-center:last-child .w-10.h-10');
+    const textPaso4 = document.querySelector('.flex.flex-col.items-center:last-child span:last-child');
+    
+    paso4.className = 'w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20';
+    if (textPaso4) textPaso4.className = 'mt-2 text-xs font-bold uppercase tracking-widest text-primary';
+    
+    // Mostrar mensaje y redirigir
+    setTimeout(() => {
+        alert('¡Reserva confirmada! Te esperamos en Glamour Studio.');
+        window.location.href = 'index.html';
+    }, 500);
 });
 
-// Inicializar datos en resumen
+// Inicializar datos en resumen y stepper
 document.addEventListener('DOMContentLoaded', function() {
     // Por defecto, seleccionar el primer servicio
     setTimeout(() => {
@@ -126,5 +222,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (primerServicio) {
             primerServicio.click();
         }
+        
+        // Actualizar stepper al cargar la página
+        actualizarStepper();
     }, 100);
 });
