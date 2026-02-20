@@ -419,14 +419,17 @@
 
 /* ===== MEJORAR VISIBILIDAD DEL OVERLAY ROSA EN MÓVIL ===== */
 @media (max-width: 768px) {
+    .work-card {
+        position: relative;
+    }
+    
     .work-card .pink-hover-overlay {
         background: rgba(238, 43, 124, 0.95);
         display: flex !important;
         align-items: center;
         justify-content: center;
         transition: opacity 0.3s ease;
-        pointer-events: none;
-        /* SIN opacity: 0 !important - lo controla JavaScript */
+        z-index: 10;
     }
     
     .work-card .pink-hover-overlay h3,
@@ -434,8 +437,14 @@
         color: white !important;
         text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
+    
+    /* Cuando el overlay está activo (opacity 1), ocultamos el contenido original */
+    .work-card .pink-hover-overlay[style*="opacity: 1"] ~ img,
+    .work-card .pink-hover-overlay[style*="opacity: 1"] ~ * {
+        opacity: 0.3; /* Difuminar el contenido de fondo */
+    }
 }
-    </style>
+</style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
 <header class="fixed top-0 left-0 right-0 z-50 px-8 py-6">
@@ -1053,6 +1062,7 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
+
 
 
 
