@@ -345,15 +345,22 @@ function verificarCamposRequeridos() {
     
     const nombreCompleto = nombreInput && nombreInput.value.trim() !== '';
     
-    // Validar email con expresión regular básica
+    // Validar email con expresión regular
     const emailValue = emailInput ? emailInput.value.trim() : '';
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
     
-    // Validar teléfono: al menos 9 dígitos (quitando espacios, +, etc)
+    // Validar teléfono: EXACTAMENTE 9 dígitos (para España)
     const telefonoValue = telefonoInput ? telefonoInput.value.trim() : '';
-    // Eliminar todo lo que no sea dígito
     const soloDigitos = telefonoValue.replace(/\D/g, '');
-    const telefonoValido = soloDigitos.length >= 9;
+    const telefonoValido = soloDigitos.length === 9; // CAMBIADO de >= a ===
+    
+    // LOGS PARA DEBUG - los verás en consola F12
+    console.log('=== VALIDACIÓN ===');
+    console.log('Nombre completo:', nombreCompleto);
+    console.log('Email:', emailValue, 'válido:', emailValido);
+    console.log('Teléfono:', telefonoValue);
+    console.log('Solo dígitos:', soloDigitos, 'longitud:', soloDigitos.length, 'válido:', telefonoValido);
+    console.log('Resultado final:', nombreCompleto && emailValido && telefonoValido);
     
     return nombreCompleto && emailValido && telefonoValido;
 }
@@ -370,11 +377,9 @@ document.querySelectorAll('input, textarea').forEach(input => {
         if (!esCampoNotas) {
             const completos = verificarCamposRequeridos();
             
-            // Debug opcional (puedes borrarlo después)
-            console.log('Campos completos?', completos, 'Flag:', datosCompletosFlag);
-            
             // Si se acaban de completar los datos y no se ha hecho scroll aún
             if (completos && !datosCompletosFlag) {
+                console.log('¡CAMPOS COMPLETOS! Haciendo scroll...');
                 datosCompletosFlag = true;
                 
                 // Pequeño retraso para asegurar que el DOM se actualizó
@@ -384,7 +389,8 @@ document.querySelectorAll('input, textarea').forEach(input => {
             }
             
             // Si ya no están completos, resetear flag
-            if (!completos) {
+            if (!completos && datosCompletosFlag) {
+                console.log('Campos incompletos, reseteando flag');
                 datosCompletosFlag = false;
                 scrollYaRealizado = false;
             }
