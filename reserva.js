@@ -1,3 +1,22 @@
+// Función para hacer scroll suave a una sección
+function scrollASeccion(selector) {
+    const elemento = document.querySelector(selector);
+    if (elemento) {
+        // Calcular la posición considerando el header y stepper sticky
+        const headerHeight = 80; // Altura del header
+        const stepperHeight = 80; // Altura aproximada del stepper sticky
+        const offset = headerHeight + stepperHeight + 20; // 20px de margen extra
+        
+        const elementPosition = elemento.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - offset;
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    }
+} 
+
 // Función para actualizar el stepper
 function actualizarStepper() {
     // Obtener los elementos del stepper
@@ -115,6 +134,10 @@ document.querySelectorAll('.group').forEach(card => {
         
         // Actualizar stepper
         actualizarStepper();
+
+         
+        // Hacer scroll a la sección de Fecha y Hora
+        scrollASeccion('.pt-8.border-t.border-stone-200');
     });
 });
 
@@ -227,3 +250,4 @@ document.addEventListener('DOMContentLoaded', function() {
         actualizarStepper();
     }, 100);
 });
+
