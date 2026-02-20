@@ -59,14 +59,14 @@ function renderizarCalendario() {
         calendarioGrid.appendChild(diaDiv);
     });
     
-    // Días del mes actual
+   // Días del mes actual
 diasMesActual.forEach(dia => {
     const diaDiv = document.createElement('div');
     
     // Crear fecha para comparar
     const fechaComparar = new Date(añoActual, mesActual, dia);
     const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0); // Resetear hora para comparar solo fechas
+    hoy.setHours(0, 0, 0, 0);
     
     // Verificar si es una fecha pasada
     const esFechaPasada = fechaComparar < hoy;
@@ -403,5 +403,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     actualizarStepper();
 });
+
 
 
