@@ -415,17 +415,6 @@
     .work-card:hover .pink-hover-overlay {
         opacity: 0 !important; /* Desactivar el hover en móvil */
     }
-    
-    .work-card .pink-hover-overlay {
-        transition: opacity 0.3s ease;
-    }
-}
-
-   /* ===== DESACTIVAR HOVER EN MÓVIL PARA TARJETAS DE TRABAJO ===== */
-@media (max-width: 768px) {
-    .work-card:hover .pink-hover-overlay {
-        opacity: 0 !important; /* Desactivar el hover en móvil */
-    }
 }
 
 /* ===== MEJORAR VISIBILIDAD DEL OVERLAY ROSA EN MÓVIL ===== */
@@ -437,7 +426,7 @@
         justify-content: center;
         transition: opacity 0.3s ease;
         pointer-events: none;
-        /* QUITAMOS el opacity: 0 !important de aquí */
+        /* SIN opacity: 0 !important - lo controla JavaScript */
     }
     
     .work-card .pink-hover-overlay h3,
@@ -445,7 +434,7 @@
         color: white !important;
         text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-} 
+}
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-100 transition-colors duration-300">
@@ -1064,6 +1053,7 @@
 <!-- ===== AGREGAR ESTA LÍNEA PARA CARGAR EL SCRIPT ===== -->
 <script src="script.js"></script>
 </body>
+
 
 
 
