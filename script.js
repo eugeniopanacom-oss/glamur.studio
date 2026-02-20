@@ -472,8 +472,8 @@ if (worksWrapper && worksPrevBtn && worksNextBtn && workCards.length > 0) {
     console.log('❌ ERROR: No se encontraron todos los elementos del carrusel de trabajos');
 }
 
-// ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL - VERSIÓN CORREGIDA =====
-console.log('🖱️ Iniciando toggle para tarjetas de trabajos (versión corregida)');
+    // ===== TOGGLE PARA TARJETAS DE TRABAJOS EN MÓVIL - VERSIÓN SIMPLIFICADA =====
+console.log('🖱️ Iniciando toggle para tarjetas de trabajos');
 
 function initWorkCardsToggle() {
     const workCards = document.querySelectorAll('.work-card');
@@ -485,18 +485,17 @@ function initWorkCardsToggle() {
     
     console.log(`✅ ${workCards.length} tarjetas de trabajo encontradas`);
     
-    // Función para detectar si es móvil
+    // Función para detectar móvil
     function isMobile() {
         return window.innerWidth <= 768;
     }
     
-    // Variable para trackear la tarjeta activa
     let activeCard = null;
     
-    // Función para resetear todas las tarjetas
-    function resetAllCards() {
+    // Función para resetear todas
+    function resetAllOverlays() {
         workCards.forEach(card => {
-            const overlay = card.querySelector('div[style*="background: rgba(238, 43, 124, 0.95)"]');
+            const overlay = card.querySelector('.work-overlay');
             if (overlay) {
                 overlay.style.opacity = '0';
             }
@@ -504,78 +503,60 @@ function initWorkCardsToggle() {
         activeCard = null;
     }
     
-    // Función para activar una tarjeta específica
-    function activateCard(card) {
-        const overlay = card.querySelector('div[style*="background: rgba(238, 43, 124, 0.95)"]');
-        if (overlay) {
-            overlay.style.opacity = '1';
-            activeCard = card;
-        }
-    }
-    
-    // Función para desactivar una tarjeta específica
-    function deactivateCard(card) {
-        const overlay = card.querySelector('div[style*="background: rgba(238, 43, 124, 0.95)"]');
-        if (overlay) {
-            overlay.style.opacity = '0';
-        }
-    }
-    
-    // Agregar event listeners a cada tarjeta
+    // Agregar evento click a cada tarjeta
     workCards.forEach(card => {
         card.addEventListener('click', function(e) {
             e.stopPropagation();
             
-            // Solo funcionar en móvil
+            // Solo en móvil
             if (!isMobile()) return;
+            
+            const overlay = this.querySelector('.work-overlay');
+            if (!overlay) return;
             
             console.log('👆 Tarjeta clickeada');
             
             if (activeCard === this) {
-                // Misma tarjeta → desactivar
-                console.log('🔴 Desactivando tarjeta');
-                deactivateCard(this);
+                // Misma tarjeta - desactivar
+                console.log('🔴 Desactivando');
+                overlay.style.opacity = '0';
                 activeCard = null;
             } else {
-                // Diferente tarjeta
-                console.log('🟢 Activando nueva tarjeta');
+                // Diferente tarjeta - desactivar anterior y activar nueva
+                console.log('🟢 Activando');
                 
-                // Desactivar la anterior si existe
                 if (activeCard) {
-                    deactivateCard(activeCard);
+                    const oldOverlay = activeCard.querySelector('.work-overlay');
+                    if (oldOverlay) oldOverlay.style.opacity = '0';
                 }
                 
-                // Activar la nueva
-                activateCard(this);
+                overlay.style.opacity = '1';
+                activeCard = this;
             }
         });
     });
     
-    // Evento para cambios de tamaño de ventana
+    // Manejar cambio de tamaño de pantalla
     window.addEventListener('resize', function() {
         if (!isMobile()) {
-            // En desktop: resetear todo
-            resetAllCards();
+            // En desktop: resetear todo (el hover funcionará)
+            resetAllOverlays();
         } else {
             // En móvil: asegurar que todas empiezan apagadas
-            resetAllCards();
+            resetAllOverlays();
         }
     });
     
-    // Inicializar: en móvil empezar todas apagadas
-    if (isMobile()) {
-        resetAllCards();
-    }
+    // Inicializar
+    resetAllOverlays();
     
-    console.log('✅ Toggle para trabajos configurado correctamente');
+    console.log('✅ Toggle para trabajos configurado');
 }
 
-// Llamar a la función después de que el DOM esté listo
-// Asegurarse de que se ejecute después de que todo esté cargado
+// Ejecutar cuando el DOM esté listo
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWorkCardsToggle);
 } else {
-    // DOM ya está cargado
     initWorkCardsToggle();
-} 
+}
 });
