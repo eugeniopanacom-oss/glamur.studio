@@ -1,3 +1,131 @@
+// Variables globales para el calendario
+let fechaActual = new Date();
+let mesActual = fechaActual.getMonth();
+let añoActual = fechaActual.getFullYear();
+let diaSeleccionado = null;
+let mesSeleccionado = null;
+let añoSeleccionado = null;
+
+// Nombres de meses en español
+const nombresMeses = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+];
+
+// Función para generar el calendario
+function generarCalendario(mes, año) {
+    const primerDiaMes = new Date(año, mes, 1);
+    const ultimoDiaMes = new Date(año, mes + 1, 0);
+    
+    // Ajustar para que la semana empiece en lunes
+    let diaSemanaInicio = primerDiaMes.getDay();
+    diaSemanaInicio = diaSemanaInicio === 0 ? 6 : diaSemanaInicio - 1;
+    
+    const diasEnMes = ultimoDiaMes.getDate();
+    
+    // Obtener días del mes anterior
+    const diasMesAnterior = [];
+    if (diaSemanaInicio > 0) {
+        const ultimoDiaMesAnterior = new Date(año, mes, 0).getDate();
+        for (let i = diaSemanaInicio - 1; i >= 0; i--) {
+            diasMesAnterior.push(ultimoDiaMesAnterior - i);
+        }
+    }
+    
+    // Días del mes actual
+    const diasMesActual = [];
+    for (let i = 1; i <= diasEnMes; i++) {
+        diasMesActual.push(i);
+    }
+    
+    return { diasMesAnterior, diasMesActual };
+}
+
+// Función para renderizar el calendario
+function renderizarCalendario() {
+    const calendarioGrid = document.querySelector('.grid-cols-7.gap-2');
+    if (!calendarioGrid) return;
+    
+    const { diasMesAnterior, diasMesActual } = generarCalendario(mesActual, añoActual);
+    
+    // Limpiar calendario
+    calendarioGrid.innerHTML = '';
+    
+    // Días del mes anterior (grises, no seleccionables)
+    diasMesAnterior.forEach(dia => {
+        const diaDiv = document.createElement('div');
+        diaDiv.className = 'h-10 flex items-center justify-center text-stone-300';
+        diaDiv.textContent = dia;
+        calendarioGrid.appendChild(diaDiv);
+    });
+    
+    // Días del mes actual (seleccionables)
+    diasMesActual.forEach(dia => {
+        const diaDiv = document.createElement('div');
+        diaDiv.className = 'h-10 flex items-center justify-center text-stone-800 dark:text-stone-200 cursor-pointer hover:bg-primary/10 rounded';
+        diaDiv.textContent = dia;
+        
+        // Verificar si está seleccionado
+        if (diaSeleccionado === dia && mesSeleccionado === mesActual && añoSeleccionado === añoActual) {
+            diaDiv.className = 'h-10 flex items-center justify-center bg-primary font-bold text-white rounded shadow-md';
+        }
+        
+        diaDiv.addEventListener('click', function() {
+            seleccionarFecha(dia, mesActual, añoActual);
+        });
+        
+        calendarioGrid.appendChild(diaDiv);
+    });
+    
+    // Actualizar título del mes
+    const mesTitulo = document.querySelector('.flex.justify-between.items-center.mb-4 .font-bold');
+    if (mesTitulo) {
+        mesTitulo.textContent = `${nombresMeses[mesActual]} ${añoActual}`;
+    }
+}
+
+// Función para seleccionar fecha
+function seleccionarFecha(dia, mes, año) {
+    diaSeleccionado = dia;
+    mesSeleccionado = mes;
+    añoSeleccionado = año;
+    
+    renderizarCalendario();
+    
+    const fecha = new Date(año, mes, dia);
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const nombreDia = diasSemana[fecha.getDay()];
+    
+    document.querySelector('.resumen-fecha').textContent = `${nombreDia}, ${dia} ${nombresMeses[mes]} ${año}`;
+    actualizarStepper();
+}
+
+// Función para cambiar mes
+function cambiarMes(direccion) {
+    mesActual += direccion;
+    
+    if (mesActual < 0) {
+        mesActual = 11;
+        añoActual -= 1;
+    } else if (mesActual > 11) {
+        mesActual = 0;
+        añoActual += 1;
+    }
+    
+    renderizarCalendario();
+}
+
+// Manejar botones de navegación del calendario
+document.querySelectorAll('.flex.space-x-2 button').forEach(btn => {
+    btn.addEventListener('click', function() {
+        if (this.querySelector('.material-icons').textContent === 'chevron_left') {
+            cambiarMes(-1);
+        } else {
+            cambiarMes(1);
+        }
+    });
+});
+
 // Función para hacer scroll suave a una sección
 function scrollASeccion(selector) {
     const elemento = document.querySelector(selector);
@@ -257,13 +385,21 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
 // Inicializar datos en resumen y stepper
 document.addEventListener('DOMContentLoaded', function() {
-    // Establecer valores por defecto en el resumen (placeholders)
+    // Establecer valores por defecto en el resumen
     document.querySelector('.resumen-servicio h4').textContent = 'Ningún servicio seleccionado';
     document.querySelector('.resumen-servicio .precio').textContent = 'Selecciona un servicio';
     document.querySelector('.resumen-fecha').textContent = 'Sin fecha seleccionada';
     document.querySelector('.resumen-hora').textContent = 'Sin hora seleccionada';
     document.querySelector('.flex.justify-between.items-center.mb-8 .text-2xl').textContent = '$0.00';
     
-    // Actualizar stepper al cargar la página (sin seleccionar nada)
+    // Renderizar calendario con mes actual
+    renderizarCalendario();
+    
+    // Quitar selección de hora predeterminada
+    document.querySelectorAll('.grid-cols-2 button').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+        btn.classList.add('border', 'border-accent-pink', 'bg-accent-pink');
+    });
+    
     actualizarStepper();
 });
